@@ -1,4 +1,5 @@
-import { JsonSchemaType, StreamTypes } from '../../types';
+import { JsonSchemaType} from '../../types';
+import {MessageType, MessageTypes} from "./Message";
 
 /**
  * `SCHEMA` messages describe the types of data in the stream. A single tap may
@@ -9,7 +10,7 @@ import { JsonSchemaType, StreamTypes } from '../../types';
  * @link https://github.com/singer-io/getting-started/blob/master/docs/SPEC.md#schema-message
  */
 export interface SchemaType<T extends JsonSchemaType> {
-  readonly type: StreamTypes.SCHEMA;
+  readonly type: MessageTypes.SCHEMA;
 
   /**
    * Name of the stream, must match the stream property of the RECORDS being described.
@@ -39,8 +40,8 @@ export interface SchemaType<T extends JsonSchemaType> {
 
 type SchemaOptions<T> = Omit<SchemaType<T>, 'type'>;
 
-export class Schema<T> implements SchemaType<T> {
-  readonly type = StreamTypes.SCHEMA;
+export class Schema<T> implements MessageType, SchemaType<T> {
+  readonly type = MessageTypes.SCHEMA;
   stream: SchemaType<T>['stream'];
   key_properties: SchemaType<T>['key_properties'];
   bookmark_properties?: SchemaType<T>['bookmark_properties'];

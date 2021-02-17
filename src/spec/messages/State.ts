@@ -1,4 +1,4 @@
-import { StreamTypes } from '../../types';
+import {MessageType, MessageTypes} from "./Message";
 
 /**
  * `STATE` messages contain the state that the Tap wishes to persist. The
@@ -8,7 +8,7 @@ import { StreamTypes } from '../../types';
  * @link https://github.com/singer-io/getting-started/blob/master/docs/SPEC.md#state-message
  */
 export interface StateType<T> {
-  readonly type: StreamTypes.STATE;
+  readonly type: MessageTypes.STATE;
 
   /**
    * Required. The JSON formatted state value.
@@ -18,8 +18,8 @@ export interface StateType<T> {
 
 type StateOptions<T> = Omit<StateType<T>, 'type'>;
 
-export class State<T> {
-  readonly type = StreamTypes.STATE;
+export class State<T> implements MessageType, StateType<T> {
+  readonly type = MessageTypes.STATE;
   value: T;
 
   constructor(options: StateOptions<T>) {

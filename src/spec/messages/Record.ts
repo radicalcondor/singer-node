@@ -1,4 +1,5 @@
-import { JsonSchemaType, StreamTypes } from '../../types';
+import { JsonSchemaType} from '../../types';
+import {Message, MessageType, MessageTypes} from "./Message";
 
 /**
  * `RECORD` messages contain the data from the data stream. A single Tap may
@@ -8,7 +9,7 @@ import { JsonSchemaType, StreamTypes } from '../../types';
  * @link https://github.com/singer-io/getting-started/blob/master/docs/SPEC.md#record-message
  */
 export interface RecordType<T extends JsonSchemaType> {
-  readonly type: StreamTypes.RECORD;
+  readonly type: MessageTypes.RECORD;
 
   /**
    * Name of the stream; must match the stream property of the `SCHEMA` property
@@ -27,8 +28,8 @@ export interface RecordType<T extends JsonSchemaType> {
 
 type RecordOptions<T> = Omit<RecordType<T>, 'type'>;
 
-export class Record<T> implements RecordType<T> {
-  readonly type = StreamTypes.RECORD;
+export class Record<T> implements MessageType, RecordType<T> {
+  readonly type = MessageTypes.RECORD;
   stream: RecordType<T>['stream'];
   time_extracted?: RecordType<T>['time_extracted'];
   record: RecordType<T>['record'];
