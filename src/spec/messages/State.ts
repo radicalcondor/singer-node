@@ -1,4 +1,4 @@
-import {MessageType, MessageTypes} from "./Message";
+import { MessageType, MessageTypes } from './Message';
 
 /**
  * `STATE` messages contain the state that the Tap wishes to persist. The

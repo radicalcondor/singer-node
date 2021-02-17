@@ -1,5 +1,5 @@
-import { JsonSchemaType} from '../../types';
-import {MessageType, MessageTypes} from "./Message";
+import { JsonSchemaType } from '../../types';
+import { MessageType, MessageTypes } from './Message';
 
 /**
  * `SCHEMA` messages describe the types of data in the stream. A single tap may

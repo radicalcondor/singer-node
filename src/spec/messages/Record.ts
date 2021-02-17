@@ -1,5 +1,5 @@
-import { JsonSchemaType} from '../../types';
-import {Message, MessageType, MessageTypes} from "./Message";
+import { JsonSchemaType } from '../../types';
+import { MessageType, MessageTypes } from './Message';
 
 /**
  * `RECORD` messages contain the data from the data stream. A single Tap may
