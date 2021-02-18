@@ -6,9 +6,13 @@ const isRecord = (message: MessageType): message is RecordType => {
   return (message as RecordType).type === MessageTypes.RECORD;
 };
 
-const foo: Partial<Record<MessageTypes, (m: any) => false | RecordMessage<JsonSchemaType>>> = {
-  [MessageTypes.RECORD]: (message: any) => isRecord(message) && new RecordMessage(message),
-}
+const foo: Partial<Record<
+  MessageTypes,
+  (m: any) => false | RecordMessage<JsonSchemaType>
+>> = {
+  [MessageTypes.RECORD]: (message: any) =>
+    isRecord(message) && new RecordMessage(message),
+};
 
 export const parseMessage = (messageString: string) => {
   const message = JSON.parse(messageString);

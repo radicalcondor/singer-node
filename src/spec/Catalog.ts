@@ -13,6 +13,7 @@ export interface CatalogType<T extends JsonSchemaType = JsonSchemaType> {
   streams: CatalogStreamType<T>[];
 }
 
-export class Catalog<T extends JsonSchemaType = JsonSchemaType> implements CatalogType<T> {
+export class Catalog<T extends JsonSchemaType = JsonSchemaType>
+  implements CatalogType<T> {
   constructor(public streams: CatalogStreamType<T>[]) {}
 }

@@ -19,7 +19,8 @@ describe('Record', () => {
   });
 
   it.skip('should successfully parse a message with a version', () => {
-    const RAW_MESSAGE = '{"type": "RECORD", "record": {"name": "foo"}, "stream": "users", "version": 2}';
+    const RAW_MESSAGE =
+      '{"type": "RECORD", "record": {"name": "foo"}, "stream": "users", "version": 2}';
 
     const parsedMessage = parseMessage(RAW_MESSAGE);
     const record = new Record({
@@ -36,7 +37,8 @@ describe('Record', () => {
   });
 
   it.skip('should fail to parse a message with a date without a timezone', () => {
-    const RAW_MESSAGE = '{"type": "RECORD", "record": {"name": "foo"}, "stream": "users", "version": 2, "time_extracted": "1970-01-02T00:00:00"}';
+    const RAW_MESSAGE =
+      '{"type": "RECORD", "record": {"name": "foo"}, "stream": "users", "version": 2, "time_extracted": "1970-01-02T00:00:00"}';
     try {
       parseMessage(RAW_MESSAGE);
     } catch (e) {
@@ -45,7 +47,8 @@ describe('Record', () => {
   });
 
   it('should successfully parse a message with a date with a timezone', () => {
-    const RAW_MESSAGE = '{"type": "RECORD", "record": {"name": "foo"}, "stream": "users", "version": 2, "time_extracted": "1970-01-02T00:00:00.000Z"}';
+    const RAW_MESSAGE =
+      '{"type": "RECORD", "record": {"name": "foo"}, "stream": "users", "version": 2, "time_extracted": "1970-01-02T00:00:00.000Z"}';
 
     const parsedMessage = parseMessage(RAW_MESSAGE);
     const record = new Record({
@@ -55,7 +58,7 @@ describe('Record', () => {
       stream: 'users',
       // @ts-ignore
       version: 2,
-      time_extracted: new Date("1970-01-02T00:00:00.000Z")
+      time_extracted: new Date('1970-01-02T00:00:00.000Z'),
     });
 
     expect(parsedMessage).toBeDefined();
@@ -73,10 +76,10 @@ describe('Record', () => {
       stream: 'users',
       // @ts-ignore
       version: 2,
-      time_extracted: new Date("1970-01-02T00:00:00.000Z")
+      time_extracted: new Date('1970-01-02T00:00:00.000Z'),
     });
 
-    expect(record.time_extracted).toEqual("1970-01-02T00:00:00.000000Z");
+    expect(record.time_extracted).toEqual('1970-01-02T00:00:00.000000Z');
   });
 
   it('should fail to parse a message with a missing record', () => {
