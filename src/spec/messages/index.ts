@@ -1,6 +1,6 @@
 import { JsonSchemaType } from '../../types';
 import { MessageType, MessageTypes } from './Message';
-import { RecordMessage as RecordMessage, RecordMessageType } from './RecordMessage';
+import { RecordMessage, RecordMessageType } from './RecordMessage';
 
 const isRecord = (message: MessageType): message is RecordMessageType => {
   return (message as RecordMessageType).type === MessageTypes.RECORD;

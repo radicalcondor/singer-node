@@ -7,7 +7,7 @@ import { MessageType, MessageTypes } from './Message';
  *
  * @link https://github.com/singer-io/getting-started/blob/master/docs/SPEC.md#state-message
  */
-export interface StateType<T> {
+export interface StateMessageType<T> {
   readonly type: MessageTypes.STATE;
 
   /**
@@ -16,11 +16,11 @@ export interface StateType<T> {
   value: T;
 }
 
-type StateOptions<T> = Omit<StateType<T>, 'type'>;
+type StateOptions<T> = Omit<StateMessageType<T>, 'type'>;
 
-export class State<T> implements MessageType, StateType<T> {
+export class StateMessage<T> implements MessageType, StateMessageType<T> {
   readonly type = MessageTypes.STATE;
-  value: StateType<T>['value'];
+  value: StateMessageType<T>['value'];
 
   constructor(options: StateOptions<T>) {
     this.value = options.value;

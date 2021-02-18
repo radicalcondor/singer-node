@@ -9,7 +9,7 @@ import { MessageType, MessageTypes } from './Message';
  *
  * @link https://github.com/singer-io/getting-started/blob/master/docs/SPEC.md#schema-message
  */
-export interface SchemaType<T extends JsonSchemaType> {
+export interface SchemaMessageType<T extends JsonSchemaType = JsonSchemaType> {
   readonly type: MessageTypes.SCHEMA;
 
   /**
@@ -38,14 +38,15 @@ export interface SchemaType<T extends JsonSchemaType> {
   schema: T;
 }
 
-type SchemaOptions<T> = Omit<SchemaType<T>, 'type'>;
+type SchemaOptions<T> = Omit<SchemaMessageType<T>, 'type'>;
 
-export class Schema<T> implements MessageType, SchemaType<T> {
+export class SchemaMessage<T extends JsonSchemaType = JsonSchemaType>
+  implements MessageType, SchemaMessageType<T> {
   readonly type = MessageTypes.SCHEMA;
-  stream: SchemaType<T>['stream'];
-  key_properties: SchemaType<T>['key_properties'];
-  bookmark_properties?: SchemaType<T>['bookmark_properties'];
-  schema: SchemaType<T>['schema'];
+  stream: SchemaMessageType<T>['stream'];
+  key_properties: SchemaMessageType<T>['key_properties'];
+  bookmark_properties?: SchemaMessageType<T>['bookmark_properties'];
+  schema: SchemaMessageType<T>['schema'];
 
   constructor(options: SchemaOptions<T>) {
     this.stream = options.stream;
