@@ -9,10 +9,10 @@ import { CatalogStreamType } from './CatalogStream';
  *
  * @link https://github.com/singer-io/getting-started/blob/master/docs/DISCOVERY_MODE.md#the-catalog
  */
-export interface CatalogType<T extends JsonSchemaType> {
+export interface CatalogType<T extends JsonSchemaType = JsonSchemaType> {
   streams: CatalogStreamType<T>[];
 }
 
-export class Catalog<T> implements CatalogType<T> {
+export class Catalog<T extends JsonSchemaType = JsonSchemaType> implements CatalogType<T> {
   constructor(public streams: CatalogStreamType<T>[]) {}
 }

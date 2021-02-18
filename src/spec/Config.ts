@@ -1,4 +1,5 @@
-import { State } from './messages/State';
+import { StateType } from './messages/State';
+import {CatalogType} from "./Catalog";
 
 /**
  * The config file contains whatever parameters the Tap needs in order to pull
@@ -34,7 +35,8 @@ export interface ConfigType {
  * @link https://github.com/singer-io/getting-started/blob/master/docs/SPEC.md#synopsis
  */
 export interface TapInputType<S> {
+  catalog: CatalogType;
   config: ConfigType;
-  state?: State<S>;
+  state?: StateType<S>;
   /** TODO: add state and catalog */
 }
