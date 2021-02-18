@@ -1,10 +1,10 @@
 describe('Catalog', () => {
   describe('#getSelectedStreams', () => {
-    it('should get a single selected stream', () => {});
-    it('should resume a currently syncing stream', () => {});
+    it.skip('should get a single selected stream', () => {});
+    it.skip('should resume a currently syncing stream', () => {});
   });
 
   describe('#getStream', () => {
-    it('should get a stream', () => {});
+    it.skip('should get a stream', () => {});
   });
 });

@@ -1,4 +1,4 @@
 describe('State', () => {
-  it('should successfully parse a message', () => {});
-  it('should fail to parse a message with a missing value', () => {});
+  it.skip('should successfully parse a message', () => {});
+  it.skip('should fail to parse a message with a missing value', () => {});
 });
