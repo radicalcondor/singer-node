@@ -1,9 +1,9 @@
 import { JsonSchemaType } from '../../types';
 import { MessageType, MessageTypes } from './Message';
-import { Record as RecordMessage, RecordType } from './Record';
+import { RecordMessage as RecordMessage, RecordMessageType } from './RecordMessage';
 
-const isRecord = (message: MessageType): message is RecordType => {
-  return (message as RecordType).type === MessageTypes.RECORD;
+const isRecord = (message: MessageType): message is RecordMessageType => {
+  return (message as RecordMessageType).type === MessageTypes.RECORD;
 };
 
 const foo: Partial<Record<

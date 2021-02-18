@@ -62,13 +62,13 @@ Notes on matching test parity:
 | `test_schema.py#TestSchema#test_repr_atomic`                                                        | `Schema#`                                                                         |
 | `test_schema.py#TestSchema#test_repr_recursive`                                                     | `Schema#`                                                                         |
 | `test_schema.py#TestSchema#test_object_from_dict_with_defaults`                                     | `Schema#`                                                                         |
-| `test_singer.py#TestSinger#test_parse_message_record_good`                                          | `Record#should successfully parse a message`                                      |
-| `test_singer.py#TestSinger#test_parse_message_record_with_version_good`                             | `Record#should successfully parse a message with a version`                       |
-| `test_singer.py#TestSinger#test_parse_message_record_naive_extraction_time`                         | `Record#should fail to parse a message with a date without a timezone`            |
-| `test_singer.py#TestSinger#test_parse_message_record_aware_extraction_time`                         | `Record#should successfully parse a message with a date with a timezone`          |
-| `test_singer.py#TestSinger#test_extraction_time_strftime`                                           | `Record#should successfully parse a message with a date with a timezone on macOS` |
-| `test_singer.py#TestSinger#test_parse_message_record_missing_record`                                | `Record#should fail to parse a message with a missing record`                     |
-| `test_singer.py#TestSinger#test_parse_message_record_missing_stream`                                | `Record#should fail to parse a message with a missing stream`                     |
+| `test_singer.py#TestSinger#test_parse_message_record_good`                                          | `RecordMessage#should successfully parse a message`                                      |
+| `test_singer.py#TestSinger#test_parse_message_record_with_version_good`                             | `RecordMessage#should successfully parse a message with a version`                       |
+| `test_singer.py#TestSinger#test_parse_message_record_naive_extraction_time`                         | `RecordMessage#should fail to parse a message with a date without a timezone`            |
+| `test_singer.py#TestSinger#test_parse_message_record_aware_extraction_time`                         | `RecordMessage#should successfully parse a message with a date with a timezone`          |
+| `test_singer.py#TestSinger#test_extraction_time_strftime`                                           | `RecordMessage#should successfully parse a message with a date with a timezone on macOS` |
+| `test_singer.py#TestSinger#test_parse_message_record_missing_record`                                | `RecordMessage#should fail to parse a message with a missing record`                     |
+| `test_singer.py#TestSinger#test_parse_message_record_missing_stream`                                | `RecordMessage#should fail to parse a message with a missing stream`                     |
 | `test_singer.py#TestSinger#test_parse_message_schema_good`                                          | `Schema#should successfully parse a message`                                      |
 | `test_singer.py#TestSinger#test_parse_message_schema_missing_stream`                                | `Schema#should fail to parse a message with a missing stream`                     |
 | `test_singer.py#TestSinger#test_parse_message_schema_missing_schema`                                | `Schema#should fail to parse a message with a missing schema`                     |
