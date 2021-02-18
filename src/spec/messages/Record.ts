@@ -8,7 +8,7 @@ import { MessageType, MessageTypes } from './Message';
  *
  * @link https://github.com/singer-io/getting-started/blob/master/docs/SPEC.md#record-message
  */
-export interface RecordType<T extends JsonSchemaType> {
+export interface RecordType<T extends JsonSchemaType = JsonSchemaType> {
   readonly type: MessageTypes.RECORD;
 
   /**
@@ -28,7 +28,8 @@ export interface RecordType<T extends JsonSchemaType> {
 
 type RecordOptions<T> = Omit<RecordType<T>, 'type'>;
 
-export class Record<T> implements MessageType, RecordType<T> {
+export class Record<T extends JsonSchemaType = JsonSchemaType>
+  implements MessageType, RecordType<T> {
   readonly type = MessageTypes.RECORD;
   stream: RecordType<T>['stream'];
   time_extracted?: RecordType<T>['time_extracted'];
