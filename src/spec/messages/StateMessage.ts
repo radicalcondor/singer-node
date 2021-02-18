@@ -14,7 +14,7 @@ const schema = yup.object().shape({
  *
  * @link https://github.com/singer-io/getting-started/blob/master/docs/SPEC.md#state-message
  */
-export interface StateMessageType<T> {
+export interface StateMessageType<T> extends MessageType {
   readonly type: MessageTypes.STATE;
 
   /**
@@ -25,7 +25,7 @@ export interface StateMessageType<T> {
 
 type StateOptions<T> = Omit<StateMessageType<T>, 'type'>;
 
-export class StateMessage<T> implements MessageType, StateMessageType<T> {
+export class StateMessage<T> implements StateMessageType<T> {
   readonly type = MessageTypes.STATE;
   value: StateMessageType<T>['value'];
 
