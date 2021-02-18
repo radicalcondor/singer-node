@@ -6,9 +6,7 @@ import { SingerSyncError } from '../errors';
 
 const recordInputSchema = yup.object().shape({
   stream: yup.string().required(),
-  time_extracted: yup.date().default(function() {
-    return new Date();
-  }),
+  time_extracted: yup.date().default(() => new Date()),
   record: yup.object().required(),
 });
 
