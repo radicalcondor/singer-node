@@ -2,11 +2,11 @@ import * as yup from 'yup';
 
 import { JsonSchemaType } from '../../types';
 import { MessageType, MessageTypes } from './Message';
-import {SingerSyncError} from "../errors";
+import { SingerSyncError } from '../errors';
 
 const recordInputSchema = yup.object().shape({
   stream: yup.string().required(),
-  time_extracted: yup.date().default(function () {
+  time_extracted: yup.date().default(function() {
     return new Date();
   }),
   record: yup.object().required(),
@@ -48,7 +48,7 @@ export class Record<T extends JsonSchemaType = JsonSchemaType>
 
   constructor(options: RecordOptions<T>) {
     try {
-      recordInputSchema.validateSync(options)
+      recordInputSchema.validateSync(options);
     } catch (e) {
       throw new SingerSyncError(e.message);
     }
