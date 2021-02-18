@@ -17,7 +17,8 @@ const schema = yup.object().shape({
  *
  * @link https://github.com/singer-io/getting-started/blob/master/docs/SPEC.md#record-message
  */
-export interface RecordMessageType<T extends JsonSchemaType = JsonSchemaType> {
+export interface RecordMessageType<T extends JsonSchemaType = JsonSchemaType>
+  extends MessageType {
   readonly type: MessageTypes.RECORD;
 
   /**
@@ -38,7 +39,7 @@ export interface RecordMessageType<T extends JsonSchemaType = JsonSchemaType> {
 type RecordOptions<T> = Omit<RecordMessageType<T>, 'type'>;
 
 export class RecordMessage<T extends JsonSchemaType = JsonSchemaType>
-  implements MessageType, RecordMessageType<T> {
+  implements RecordMessageType<T> {
   readonly type = MessageTypes.RECORD;
   stream: RecordMessageType<T>['stream'];
   time_extracted?: RecordMessageType<T>['time_extracted'];

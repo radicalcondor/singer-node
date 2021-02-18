@@ -19,7 +19,8 @@ const schema = yup.object().shape({
  *
  * @link https://github.com/singer-io/getting-started/blob/master/docs/SPEC.md#schema-message
  */
-export interface SchemaMessageType<T extends JsonSchemaType = JsonSchemaType> {
+export interface SchemaMessageType<T extends JsonSchemaType = JsonSchemaType>
+  extends MessageType {
   readonly type: MessageTypes.SCHEMA;
 
   /**
@@ -51,7 +52,7 @@ export interface SchemaMessageType<T extends JsonSchemaType = JsonSchemaType> {
 type SchemaOptions<T> = Omit<SchemaMessageType<T>, 'type'>;
 
 export class SchemaMessage<T extends JsonSchemaType = JsonSchemaType>
-  implements MessageType, SchemaMessageType<T> {
+  implements SchemaMessageType<T> {
   readonly type = MessageTypes.SCHEMA;
   stream: SchemaMessageType<T>['stream'];
   key_properties: SchemaMessageType<T>['key_properties'];
