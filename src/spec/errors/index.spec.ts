@@ -1,9 +1,8 @@
-import * as errors from "./index";
+import * as errors from './';
 
 const MESSAGE = 'An error occurred';
 
 describe('errors', () => {
-
   it('should throw a SingerError with the correct message', () => {
     try {
       throw new errors.SingerError(MESSAGE);
@@ -13,7 +12,7 @@ describe('errors', () => {
   });
 
   it('should throw a SingerError with the correct multiline message', () => {
-    const MULTILINE_MESSAGE = ["Line 1", "Line 2", "Line 3"].join('\n');
+    const MULTILINE_MESSAGE = ['Line 1', 'Line 2', 'Line 3'].join('\n');
     try {
       throw new errors.SingerError(MULTILINE_MESSAGE);
     } catch (e) {

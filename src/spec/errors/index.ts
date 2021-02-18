@@ -1,10 +1,9 @@
-import { BaseError } from "make-error";
+import { BaseError } from 'make-error';
 
 /**
  * The base `Error` class for Singer.
  */
 export class SingerError extends BaseError {
-
   /**
    * Create an error with a multi-line error message. The first line is the
    * error's class name. The subsequent lines are the message that class was
@@ -14,10 +13,7 @@ export class SingerError extends BaseError {
    */
   constructor(message?: string) {
     super(message);
-    this.message = [
-      this.constructor.name,
-      message,
-    ].join('\n');
+    this.message = [this.constructor.name, message].join('\n');
   }
 }
 
