@@ -40,11 +40,11 @@
   "size-limit": [
     {
       "path": "dist/singer-node.cjs.production.min.js",
-      "limit": "10 KB"
+      "limit": "100 KB"
     },
     {
       "path": "dist/singer-node.esm.js",
-      "limit": "10 KB"
+      "limit": "100 KB"
     }
   ],
   "dependencies": {
