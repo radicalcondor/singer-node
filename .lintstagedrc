@@ -1,0 +1,4 @@
+{
+  "*.md": ["prettier --write"],
+  "*.ts": ["prettier --write", "tsdx lint"]
+}
