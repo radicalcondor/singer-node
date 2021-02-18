@@ -1,5 +1,6 @@
 # TODO
 
+- [ ] Implement `VERSION` message
 - [ ] Reach test parity with `singer-python`
 - [ ] Use `yup` to validate and to [replace `*Type` interfaces](https://medium.com/@maurice.de.beijer/yup-validation-and-typescript-and-formik-6c342578a20e)
 - [ ] HTTP client capable of caching and managing OAuth tokens
