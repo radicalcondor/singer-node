@@ -1,5 +1,16 @@
+import * as yup from 'yup';
+
 import { JsonSchemaType } from '../../types';
 import { MessageType, MessageTypes } from './Message';
+import {SingerSyncError} from "../errors";
+
+const recordInputSchema = yup.object().shape({
+  stream: yup.string().required(),
+  time_extracted: yup.date().default(function () {
+    return new Date();
+  }),
+  record: yup.object().required(),
+});
 
 /**
  * `RECORD` messages contain the data from the data stream. A single Tap may
@@ -36,6 +47,11 @@ export class Record<T extends JsonSchemaType = JsonSchemaType>
   record: RecordType<T>['record'];
 
   constructor(options: RecordOptions<T>) {
+    try {
+      recordInputSchema.validateSync(options)
+    } catch (e) {
+      throw new SingerSyncError(e.message);
+    }
     this.stream = options.stream;
     this.time_extracted = options.time_extracted;
     this.record = options.record;
