@@ -20,7 +20,7 @@ type StateOptions<T> = Omit<StateType<T>, 'type'>;
 
 export class State<T> implements MessageType, StateType<T> {
   readonly type = MessageTypes.STATE;
-  value: T;
+  value: StateType<T>['value'];
 
   constructor(options: StateOptions<T>) {
     this.value = options.value;
