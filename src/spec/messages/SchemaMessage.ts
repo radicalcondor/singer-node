@@ -1,5 +1,15 @@
+import * as yup from 'yup';
+
 import { JsonSchemaType } from '../../types';
 import { MessageType, MessageTypes } from './Message';
+import { SingerSyncError } from '../errors';
+
+const schema = yup.object().shape({
+  bookmark_properties: yup.array().of(yup.string()),
+  key_properties: yup.array().of(yup.string()),
+  schema: yup.object().required(),
+  stream: yup.string().required(),
+});
 
 /**
  * `SCHEMA` messages describe the types of data in the stream. A single tap may
@@ -49,6 +59,11 @@ export class SchemaMessage<T extends JsonSchemaType = JsonSchemaType>
   schema: SchemaMessageType<T>['schema'];
 
   constructor(options: SchemaOptions<T>) {
+    try {
+      schema.validateSync(options);
+    } catch (e) {
+      throw new SingerSyncError(e.message);
+    }
     this.stream = options.stream;
     this.key_properties = options.key_properties;
     this.bookmark_properties = options.bookmark_properties ?? [];

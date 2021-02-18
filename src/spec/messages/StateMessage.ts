@@ -1,4 +1,11 @@
+import * as yup from 'yup';
+
 import { MessageType, MessageTypes } from './Message';
+import { SingerSyncError } from '../errors';
+
+const schema = yup.object().shape({
+  value: yup.mixed().optional(),
+});
 
 /**
  * `STATE` messages contain the state that the Tap wishes to persist. The
@@ -23,6 +30,11 @@ export class StateMessage<T> implements MessageType, StateMessageType<T> {
   value: StateMessageType<T>['value'];
 
   constructor(options: StateOptions<T>) {
+    try {
+      schema.validateSync(options);
+    } catch (e) {
+      throw new SingerSyncError(e.message);
+    }
     this.value = options.value;
   }
 
