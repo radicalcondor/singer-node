@@ -1,4 +1,4 @@
-import { StateType } from './messages/State';
+import { StateMessageType } from './messages/StateMessage';
 import { CatalogType } from './Catalog';
 
 /**
@@ -37,6 +37,6 @@ export interface ConfigType {
 export interface TapInputType<S> {
   catalog: CatalogType;
   config: ConfigType;
-  state?: StateType<S>;
+  state?: StateMessageType<S>;
   /** TODO: add state and catalog */
 }
