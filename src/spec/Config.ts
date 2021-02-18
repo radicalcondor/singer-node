@@ -1,5 +1,5 @@
 import { StateType } from './messages/State';
-import {CatalogType} from "./Catalog";
+import { CatalogType } from './Catalog';
 
 /**
  * The config file contains whatever parameters the Tap needs in order to pull
