@@ -1,29 +1,30 @@
 import { RecordMessage } from './RecordMessage';
 
 import { parseMessage } from './index';
+import { SingerSyncError } from '../errors';
 
 describe(RecordMessage.name, () => {
   it('should successfully parse a message', () => {
     const RAW_MESSAGE =
       '{"type": "RECORD", "record": {"name": "foo"}, "stream": "users"}';
-    const parsedMessage = parseMessage(RAW_MESSAGE);
-    const record = new RecordMessage({
+    const actual = parseMessage(RAW_MESSAGE);
+    const expected = new RecordMessage({
       record: {
         name: 'foo',
       },
       stream: 'users',
     });
 
-    expect(parsedMessage).toBeDefined();
-    expect(`${parsedMessage}`).toEqual(`${record}`);
+    expect(actual).toBeDefined();
+    expect(`${actual}`).toEqual(`${expected}`);
   });
 
   it.skip('should successfully parse a message with a version', () => {
     const RAW_MESSAGE =
       '{"type": "RECORD", "record": {"name": "foo"}, "stream": "users", "version": 2}';
 
-    const parsedMessage = parseMessage(RAW_MESSAGE);
-    const record = new RecordMessage({
+    const actual = parseMessage(RAW_MESSAGE);
+    const expected = new RecordMessage({
       record: {
         name: 'foo',
       },
@@ -32,8 +33,8 @@ describe(RecordMessage.name, () => {
       version: 2,
     });
 
-    expect(parsedMessage).toBeDefined();
-    expect(`${parsedMessage}`).toEqual(`${record}`);
+    expect(actual).toBeDefined();
+    expect(`${actual}`).toEqual(`${expected}`);
   });
 
   it.skip('should fail to parse a message with a date without a timezone', () => {
@@ -50,8 +51,8 @@ describe(RecordMessage.name, () => {
     const RAW_MESSAGE =
       '{"type": "RECORD", "record": {"name": "foo"}, "stream": "users", "version": 2, "time_extracted": "1970-01-02T00:00:00.000Z"}';
 
-    const parsedMessage = parseMessage(RAW_MESSAGE);
-    const record = new RecordMessage({
+    const actual = parseMessage(RAW_MESSAGE);
+    const expected = new RecordMessage({
       record: {
         name: 'foo',
       },
@@ -61,8 +62,8 @@ describe(RecordMessage.name, () => {
       time_extracted: new Date('1970-01-02T00:00:00.000Z'),
     });
 
-    expect(parsedMessage).toBeDefined();
-    expect(`${parsedMessage}`).toEqual(`${record}`);
+    expect(actual).toBeDefined();
+    expect(`${actual}`).toEqual(`${expected}`);
   });
 
   /**
@@ -84,11 +85,11 @@ describe(RecordMessage.name, () => {
 
   it('should fail to parse a message with a missing record', () => {
     const RAW_MESSAGE = '{"type": "RECORD", "stream": "users"}';
-    expect(() => parseMessage(RAW_MESSAGE)).toThrow();
+    expect(() => parseMessage(RAW_MESSAGE)).toThrow(SingerSyncError);
   });
 
   it('should fail to parse a message with a missing stream', () => {
     const RAW_MESSAGE = '{"type": "RECORD", "record": {"name": "foo"}}';
-    expect(() => parseMessage(RAW_MESSAGE)).toThrow();
+    expect(() => parseMessage(RAW_MESSAGE)).toThrow(SingerSyncError);
   });
 });
