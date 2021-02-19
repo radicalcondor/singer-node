@@ -39,7 +39,7 @@ export enum StreamInclusionTypes {
  *
  * @link https://github.com/singer-io/getting-started/blob/master/docs/DISCOVERY_MODE.md#metadata
  */
-export interface CatalogStreamMetadataType {
+export interface CatalogEntryMetadataType {
   metadata: {
     /**
      * Indicates that this node in the schema has been selected by the user for
@@ -57,19 +57,19 @@ export interface CatalogStreamMetadataType {
      * @example INCREMENTAL
      * @example LOG_BASED.
      */
-    readonly 'replication-method': StreamReplicationMethods;
+    readonly 'replication-method'?: StreamReplicationMethods;
 
     /**
      * The name of a property in the source to use as a "bookmark". For example,
      * this will often be an "updated-at" field or an auto-incrementing primary
      * key (requires `replication-method`).
      */
-    readonly 'replication-key': string;
+    readonly 'replication-key'?: string;
 
     /**
      * List of key properties for a database view.
      */
-    readonly 'view-key-properties': string;
+    readonly 'view-key-properties'?: string;
 
     /**
      * A field's replication status.
@@ -78,7 +78,7 @@ export interface CatalogStreamMetadataType {
      * @example automatic
      * @example unsupported
      */
-    inclusion: StreamInclusionTypes;
+    inclusion?: StreamInclusionTypes;
 
     /**
      * Indicates if a node in the schema should be replicated if a user has not
@@ -87,12 +87,12 @@ export interface CatalogStreamMetadataType {
      * @example true
      * @example false
      */
-    'selected-by-default': boolean;
+    'selected-by-default'?: boolean;
 
     /**
      * List of fields that could be used as replication keys.
      */
-    'valid-replication-keys': string[];
+    'valid-replication-keys'?: string[];
 
     /**
      * Used to force the replication method to either `FULL_TABLE` or
@@ -101,19 +101,19 @@ export interface CatalogStreamMetadataType {
      * @example FULL_TABLE
      * @example INCREMENTAL
      */
-    'forced-replication-method':
+    'forced-replication-method'?:
       | StreamReplicationMethods.FULL_TABLE
       | StreamReplicationMethods.INCREMENTAL;
 
     /**
      * List of key properties for a database table.
      */
-    'table-key-properties': string[];
+    'table-key-properties'?: string[];
 
     /**
      * The name of the stream.
      */
-    'schema-name': string;
+    'schema-name'?: string;
 
     /**
      * Indicates whether a stream corresponds to a database view.
@@ -148,7 +148,7 @@ export interface CatalogStreamMetadataType {
 /**
  * @link https://github.com/singer-io/getting-started/blob/master/docs/DISCOVERY_MODE.md#the-catalog
  */
-export interface CatalogStreamType<T extends JsonSchemaType> {
+export interface CatalogEntryType<T extends JsonSchemaType = JsonSchemaType> {
   /**
    * Name of the stream; must match the stream property of the any `SCHEMA`s
    * available to this Tap.
@@ -170,24 +170,42 @@ export interface CatalogStreamType<T extends JsonSchemaType> {
   table_name?: string;
 
   /**
-   * @see CatalogStreamMetadataType
+   * @see CatalogEntryMetadataType
    */
-  metadata?: CatalogStreamMetadataType[];
+  metadata?: CatalogEntryMetadataType[];
 }
 
-export class CatalogStream<T extends JsonSchemaType>
-  implements CatalogStreamType<T> {
-  metadata: CatalogStreamType<T>['metadata'];
-  schema: CatalogStreamType<T>['schema'];
-  stream: CatalogStreamType<T>['stream'];
-  table_name?: CatalogStreamType<T>['table_name'];
-  tap_stream_id: CatalogStreamType<T>['tap_stream_id'];
+type CompiledMetadata = Record<string, CatalogEntryMetadataType['metadata']>;
 
-  constructor(options: CatalogStreamType<T>) {
-    this.metadata = options.metadata;
+export class CatalogEntry<T extends JsonSchemaType = JsonSchemaType>
+  implements CatalogEntryType<T> {
+  metadata: CatalogEntryType<T>['metadata'];
+  compiledMetadata: CompiledMetadata;
+  schema: CatalogEntryType<T>['schema'];
+  stream: CatalogEntryType<T>['stream'];
+  table_name?: CatalogEntryType<T>['table_name'];
+  tap_stream_id: CatalogEntryType<T>['tap_stream_id'];
+
+  constructor(options: CatalogEntryType<T>) {
     this.schema = options.schema;
     this.stream = options.stream;
     this.table_name = options.table_name;
     this.tap_stream_id = options.tap_stream_id;
+    this.metadata = options.metadata;
+    this.compiledMetadata = this.convertMetadataToMap(options.metadata);
   }
+
+  convertMetadataToMap = (metadata: CatalogEntryMetadataType[] = []) => {
+    return metadata.reduce((result, value) => {
+      const key = value.breadcrumb.join('');
+      return {
+        ...result,
+        [key]: value.metadata,
+      };
+    }, {} as CompiledMetadata);
+  };
+
+  isSelected = () => {
+    return this.compiledMetadata['']?.selected;
+  };
 }
