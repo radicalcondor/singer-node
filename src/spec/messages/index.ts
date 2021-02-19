@@ -1,13 +1,11 @@
 import { MessageType, MessageTypes } from './Message';
 import { RecordMessage, RecordMessageType } from './RecordMessage';
-import {SchemaMessage, SchemaMessageType} from "./SchemaMessage";
-import {SingerError} from "../errors";
+import { SchemaMessage, SchemaMessageType } from './SchemaMessage';
+import { SingerError } from '../errors';
+import { StateMessage, StateMessageType } from './StateMessage';
 
 const isMessage = (message: object): message is MessageType => {
-  if ('type' in message) {
-    return true;
-  };
-  return false;
+  return 'type' in message;
 };
 
 const isRecord = (message: MessageType): message is RecordMessageType => {
@@ -18,21 +16,25 @@ const isSchema = (message: MessageType): message is SchemaMessageType => {
   return (message as SchemaMessageType).type === MessageTypes.SCHEMA;
 };
 
+const isState = (message: MessageType): message is StateMessageType => {
+  return (message as StateMessageType).type === MessageTypes.STATE;
+};
+
 type ParserFn<T extends MessageType> = (message: MessageType) => T | false;
 type AllMessageTypes = RecordMessageType | SchemaMessageType;
-type MessageParsers = Record<MessageTypes, ParserFn<AllMessageTypes>>
+type MessageParsers = Record<MessageTypes, ParserFn<AllMessageTypes>>;
 
-// @TODO Remove `Partial<>` after implementing MessageTypes.STATE
-const MESSAGE_PARSERS: Partial<MessageParsers> = {
+const MESSAGE_PARSERS: MessageParsers = {
   [MessageTypes.RECORD]: (message: any) =>
     isRecord(message) && new RecordMessage(message),
   [MessageTypes.SCHEMA]: (message): any =>
     isSchema(message) && new SchemaMessage(message),
+  [MessageTypes.STATE]: (message): any =>
+    isState(message) && new StateMessage(message.value),
 };
 
 export const parseMessage = (messageString: string) => {
-
-  let message
+  let message;
   try {
     message = JSON.parse(messageString);
   } catch (e) {
@@ -40,7 +42,9 @@ export const parseMessage = (messageString: string) => {
   }
 
   if (!isMessage(message)) {
-    throw new SingerError('The provided JSON does not seem to be a valid Singer message');
+    throw new SingerError(
+      'The provided JSON does not seem to be a valid Singer message',
+    );
   }
 
   const parser = MESSAGE_PARSERS[message.type as MessageTypes];

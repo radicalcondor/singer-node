@@ -1,6 +1,6 @@
 import { SchemaMessage } from './SchemaMessage';
 import { parseMessage } from './index';
-import {SingerSyncError} from "../errors";
+import { SingerSyncError } from '../errors';
 
 describe(SchemaMessage.name, () => {
   it('should successfully parse a message', () => {
@@ -25,17 +25,20 @@ describe(SchemaMessage.name, () => {
   });
 
   it('should fail to parse a message with a missing stream', () => {
-    const RAW_MESSAGE = '{"type": "SCHEMA", "schema": {"type": "object", "properties": {"name": {"type": "string"}}}, "key_properties": ["name"]}';
+    const RAW_MESSAGE =
+      '{"type": "SCHEMA", "schema": {"type": "object", "properties": {"name": {"type": "string"}}}, "key_properties": ["name"]}';
     expect(() => parseMessage(RAW_MESSAGE)).toThrow(SingerSyncError);
   });
 
   it('should fail to parse a message with a missing schema', () => {
-    const RAW_MESSAGE = '{"type": "SCHEMA", "stream": "users", "key_properties": ["name"]}';
+    const RAW_MESSAGE =
+      '{"type": "SCHEMA", "stream": "users", "key_properties": ["name"]}';
     expect(() => parseMessage(RAW_MESSAGE)).toThrow(SingerSyncError);
   });
 
   it('should fail to parse a message with missing key_properties', () => {
-    const RAW_MESSAGE = '{"type": "SCHEMA", "stream": "users", "schema": {"type": "object", "properties": {"name": {"type": "string"}}}}';
+    const RAW_MESSAGE =
+      '{"type": "SCHEMA", "stream": "users", "schema": {"type": "object", "properties": {"name": {"type": "string"}}}}';
     expect(() => parseMessage(RAW_MESSAGE)).toThrow(SingerSyncError);
   });
 });
