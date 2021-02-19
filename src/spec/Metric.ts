@@ -116,3 +116,58 @@ export class Metric implements MetricType {
     })}`;
   };
 }
+
+export interface CounterType extends MetricType {
+  type: MetricTypes.COUNTER;
+}
+
+/**
+ * This would print a metric like this:
+ *
+ * ```json
+ * {
+ *   "type":   "counter",
+ *   "metric": "record_count",
+ *   "value":   12345,
+ *   "tags": {
+ *     "endpoint": "users",
+ *   }
+ * }
+ * ```
+ */
+export class Counter extends Metric {
+  constructor(options: Omit<CounterType, 'type'>) {
+    super({
+      type: MetricTypes.COUNTER,
+      ...options,
+    });
+  }
+}
+
+export interface TimerType extends MetricType {
+  type: MetricTypes.TIMER;
+}
+
+/**
+ * Produces metrics about the duration of operations.
+ *
+ * ```json
+ * {
+ *    "type": "timer",
+ *    "metric": "request_duration",
+ *    "value": 1.23,
+ *    "tags": {
+ *      "endpoint": "users",
+ *      "status": "success"
+ *    }
+ * }
+ * ```
+ */
+export class Timer extends Metric {
+  constructor(options: Omit<CounterType, 'type'>) {
+    super({
+      type: MetricTypes.COUNTER,
+      ...options,
+    });
+  }
+}
