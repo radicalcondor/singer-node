@@ -3,9 +3,7 @@ import * as yup from 'yup';
 import { MessageType, MessageTypes } from './Message';
 import { SingerSyncError } from '../errors';
 
-const schema = yup.object().shape({
-  value: yup.mixed().optional(),
-});
+const schema = yup.object().required();
 
 /**
  * `STATE` messages contain the state that the Tap wishes to persist. The
@@ -14,7 +12,7 @@ const schema = yup.object().shape({
  *
  * @link https://github.com/singer-io/getting-started/blob/master/docs/SPEC.md#state-message
  */
-export interface StateMessageType<T> extends MessageType {
+export interface StateMessageType<T extends any = any> extends MessageType {
   readonly type: MessageTypes.STATE;
 
   /**
@@ -23,19 +21,17 @@ export interface StateMessageType<T> extends MessageType {
   value: T;
 }
 
-type StateOptions<T> = Omit<StateMessageType<T>, 'type'>;
-
-export class StateMessage<T> implements StateMessageType<T> {
+export class StateMessage<T extends {} = {}> implements StateMessageType<T> {
   readonly type = MessageTypes.STATE;
   value: StateMessageType<T>['value'];
 
-  constructor(options: StateOptions<T>) {
+  constructor(value: StateMessageType<T>['value']) {
     try {
-      schema.validateSync(options);
+      schema.validateSync(value);
     } catch (e) {
       throw new SingerSyncError(e.message);
     }
-    this.value = options.value;
+    this.value = value;
   }
 
   toString = () => {

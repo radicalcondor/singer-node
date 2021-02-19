@@ -6,7 +6,10 @@ import { SingerSyncError } from '../errors';
 
 const schema = yup.object().shape({
   bookmark_properties: yup.array().of(yup.string()),
-  key_properties: yup.array().of(yup.string()).required(),
+  key_properties: yup
+    .array()
+    .of(yup.string())
+    .required(),
   schema: yup.object().required(),
   stream: yup.string().required(),
 });
