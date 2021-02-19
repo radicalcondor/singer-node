@@ -1,6 +1,6 @@
 import { RecordMessage } from './RecordMessage';
 
-import { parseMessage } from './index';
+import { parseMessage } from './parseMessage';
 import { SingerSyncError } from '../errors';
 
 describe(RecordMessage.name, () => {

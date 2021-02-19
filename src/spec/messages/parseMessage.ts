@@ -50,7 +50,7 @@ export const parseMessage = (messageString: string) => {
   const parser = MESSAGE_PARSERS[message.type as MessageTypes];
 
   if (!parser) {
-    throw new Error('Invalid message type');
+    throw new SingerError('Invalid message type');
   }
 
   return parser(message);
