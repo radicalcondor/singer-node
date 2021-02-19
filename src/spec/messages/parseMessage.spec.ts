@@ -1,5 +1,5 @@
 import { parseMessage } from './parseMessage';
-import {SingerError} from "../errors";
+import { SingerError } from '../errors';
 
 describe(parseMessage.name, () => {
   it('should fail to parse invalid JSON', () => {
