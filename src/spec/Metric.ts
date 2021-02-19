@@ -61,6 +61,8 @@ export interface TagsType {
  * A Tap should periodically emit structured log messages containing metrics
  * about read operations. Consumers of the Tap's logs can parse these metrics
  * out of the logs for monitoring or analysis.
+ *
+ * @link https://github.com/singer-io/getting-started/blob/master/docs/SYNC_MODE.md#metric-messages
  */
 export interface MetricType {
   /**
@@ -106,11 +108,11 @@ export class Metric implements MetricType {
   }
 
   toString = () => {
-    return JSON.stringify({
+    return `INFO METRIC: ${JSON.stringify({
       type: this.type,
       metric: this.metric,
       value: this.value,
       tags: this.tags,
-    });
+    })}`;
   };
 }
