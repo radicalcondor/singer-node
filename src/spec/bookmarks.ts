@@ -1,4 +1,3 @@
-import has from 'lodash.has';
 import get from 'lodash.get';
 import set from 'lodash.set';
 
@@ -10,27 +9,17 @@ export type BookmarksStateType = {
   };
 };
 
-// export type BookmarksType = StateMessageType<BookmarksType>;
-
 export type BookmarkValue = any;
 
-const getNewState = (
+export const getPath = (tapStreamId: string, ...paths: string[]) => 
+  `bookmarks.${tapStreamId}${paths.length > 0 ? `.${paths.join('.')}` : ''}`
+
+export const setState = (
   state: BookmarksStateType,
-  newState: any,
-): BookmarksStateType => ({
-  ...state,
-  ...newState,
-});
-
-const generateBookmarkKey = (tapStreamId: string, key?: string) => {
-  let result = `bookmarks.${tapStreamId}`;
-
-  if (key) {
-    result = `${result}.${key}`;
-  }
-
-  return result;
-};
+  path: string,
+  value?: any
+): BookmarksStateType => 
+  set({...state}, path, value);
 
 export const writeBookmark = (
   state: BookmarksStateType,
@@ -38,64 +27,56 @@ export const writeBookmark = (
   key: string,
   val: BookmarkValue,
 ): BookmarksStateType =>
-  getNewState(state, { bookmarks: { [tapStreamId]: { [key]: val } } });
+  setState(state, getPath(tapStreamId, key), val);
 
 export const getBookmark = (
   state: BookmarksStateType,
   tapStreamId: string,
   key: string,
   _default?: BookmarkValue,
-): BookmarkValue => get(state, generateBookmarkKey(tapStreamId, key), _default);
+): BookmarkValue => get(state, getPath(tapStreamId, key), _default);
 
 export const clearBookmark = (
   state: BookmarksStateType,
   tapStreamId: string,
   key: string,
-): BookmarksStateType => {
-  const bookmarkKey = generateBookmarkKey(tapStreamId, key);
-  const nextState = { ...state };
-  if (has(nextState, bookmarkKey)) {
-    set(nextState, bookmarkKey, undefined);
-  }
-  return nextState;
-};
+): BookmarksStateType => 
+  setState(state, getPath(tapStreamId, key));
 
-// export const resetStream = (
-//   state: BookmarksStateType,
-//   tapStreamId: string,
-// ): BookmarksStateType => {
-//   return state;
-// };
+export const resetStream = (
+  state: BookmarksStateType,
+  tapStreamId: string,
+): BookmarksStateType => 
+  setState(state, getPath(tapStreamId), {});
 
-// export const setOffset = (
-//   state: BookmarksStateType,
-//   tapStreamId: string,
-//   offsetKey: string,
-//   offsetValue: BookmarkValue,
-// ): BookmarksStateType => {
-//   return state;
-// };
+export const setOffset = (
+  state: BookmarksStateType,
+  tapStreamId: string,
+  offsetKey: string,
+  offsetValue: BookmarkValue,
+): BookmarksStateType => 
+  setState(state, getPath(tapStreamId, 'offset', offsetKey), offsetValue);
 
-// export const clearOffset = (
-//   state: BookmarksStateType,
-//   tapStreamId: string,
-// ): BookmarksStateType => {
-//   return state;
-// };
+export const clearOffset = (
+  state: BookmarksStateType,
+  tapStreamId: string,
+): BookmarksStateType => 
+  setState(state, getPath(tapStreamId, 'offset'), {});
 
 export const getOffset = <T>(
   state: BookmarksStateType,
   tapStreamId: string,
   defaultValue?: T,
 ): BookmarksStateType =>
-  get(state, `${generateBookmarkKey(tapStreamId)}.offset`, defaultValue);
+  get(state, `${getPath(tapStreamId, 'offset')}`, defaultValue);
 
-// export const setCurrentlySyncing = (
-//   state: BookmarksStateType,
-//   tapStreamId: string,
-// ): BookmarksStateType => {
-//   return state;
-// };
+export const setCurrentlySyncing = (
+  state: BookmarksStateType,
+  tapStreamId: string,
+): BookmarksStateType => ({
+  ...state, 
+  currently_syncing: tapStreamId,
+});
 
 export const getCurrentlySyncing = (
   state: BookmarksStateType,
