@@ -42,7 +42,9 @@ export class Catalog implements CatalogType {
     return this.streams.filter(stream => {
       if (stream.isSelected()) {
         logger.info(`Skipping stream: ${stream.tap_stream_id}`);
+        return true;
       }
+      return false;
     });
   };
 }

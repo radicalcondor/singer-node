@@ -1,5 +1,9 @@
+import * as logger from './logger';
+
 import { CatalogEntry, CatalogEntryMetadataType } from './CatalogEntry';
 import { Catalog } from './Catalog';
+
+jest.mock('./logger');
 
 const createStreamEntry = (
   streamId: string,
@@ -34,7 +38,7 @@ describe('Catalog', () => {
       ]);
 
       const actual = catalog.getSelectedStreams();
-
+      expect(logger.info).toHaveBeenCalledTimes(1);
       expect(actual).toEqual([selectedEntry]);
     });
 
