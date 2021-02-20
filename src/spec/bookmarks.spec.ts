@@ -94,8 +94,38 @@ describe('bookmarks', () => {
   });
 
   describe(`#${bookmarks.getOffset.name}`, () => {
-    it.skip('should provide defaults when no state is provided', () => {});
-    it.skip('should provide defaults when no bookmarks exist', () => {});
+    it.skip('should provide defaults when no state is provided', () => {
+
+      const state: BookmarksStateType = {};
+
+      // Case with no value to fall back on
+      expect(
+        bookmarks.getOffset(state, 'some_stream'),
+      ).toBeUndefined();
+
+      // Case with a given default
+      expect(
+        bookmarks.getOffset(state, 'some_stream', 'default_value'),
+      ).toBe('default_value');
+
+    });
+    it.skip('should provide defaults when no bookmarks exist', () => {
+
+      const state: BookmarksStateType = {
+        bookmarks: {},
+      };
+
+      // Case with no value to fall back on
+      expect(
+        bookmarks.getOffset(state, 'some_stream'),
+      ).toBeUndefined();
+
+      // Case with a given default
+      expect(
+        bookmarks.getOffset(state, 'some_stream', 'default_value'),
+      ).toEqual('default_value');
+
+    });
 
     it('should retrieve values when state is provided', () => {
       const streamId = 'customers';
@@ -176,4 +206,27 @@ describe('bookmarks', () => {
       );
     });
   });
+
+  describe('bookmark utils', () => {
+    it('should return the correct path when calling `getPath`', () => {
+      const streamId = 'customers';
+      const path = bookmarks.getPath(streamId);
+      const path1 = bookmarks.getPath(streamId, 'test');
+      const path2 = bookmarks.getPath(streamId, 'foo', 'bar');
+
+      expect(path).toEqual(`bookmarks.customers`);
+      expect(path1).toEqual(`bookmarks.customers.test`);
+      expect(path2).toEqual(`bookmarks.customers.foo.bar`);
+    }); 
+
+    it('should return updated state when calling `setState`', () => {
+      const streamId = 'customers';
+      const state: BookmarksStateType = {};
+      const path = bookmarks.getPath(streamId, 'inner');
+      const value = 'test';
+      const newState = bookmarks.setState(state, path, value);
+
+      expect(newState).toEqual({bookmarks: { [streamId]: { inner: value } }});
+    })    
+  })
 });
