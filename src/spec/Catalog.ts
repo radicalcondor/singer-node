@@ -39,13 +39,8 @@ export class Catalog implements CatalogType {
     });
   };
 
-  private shuffleStreams = (state: BookmarksStateType = {}) => {
-    const currentlySyncingStream = getCurrentlySyncing(state);
-
-    if (!currentlySyncingStream) {
-      return this.streams;
-    }
-    return this.streams.reverse();
+  shuffleStreams = (state: BookmarksStateType = {}) => {
+    return getCurrentlySyncing(state) ? this.streams.reverse() : this.streams;
   };
 
   getSelectedStreams = (state?: BookmarksStateType): CatalogEntryType[] => {
