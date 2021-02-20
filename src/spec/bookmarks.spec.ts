@@ -94,8 +94,9 @@ describe('bookmarks', () => {
   });
 
   describe(`#${bookmarks.getOffset.name}`, () => {
-    it('should provide defaults when no state is provided', () => {});
-    it('should provide defaults when no bookmarks exist', () => {});
+    it.skip('should provide defaults when no state is provided', () => {});
+    it.skip('should provide defaults when no bookmarks exist', () => {});
+
     it('should retrieve values when state is provided', () => {
       const streamId = 'customers';
       const bookmarkKey = 'datetime';
@@ -138,7 +139,41 @@ describe('bookmarks', () => {
   });
 
   describe(`#${bookmarks.getCurrentlySyncing.name}`, () => {
-    it('should provide defaults when no state is provided', () => {});
-    it('should retrieve values when state is provided', () => {});
+    it('should provide defaults when no state is provided', () => {
+      const state = {};
+
+      // Case with no value to fall back on
+      expect(bookmarks.getCurrentlySyncing(state)).toBeUndefined();
+
+      // Case with a given default
+      expect(bookmarks.getCurrentlySyncing(state, 'default_value')).toEqual(
+        'default_value',
+      );
+    });
+
+    it('should retrieve values when state is provided', () => {
+      const streamId = 'customers';
+      const bookmarkKey = 'datetime';
+      const bookmarkValue = 123456789;
+      const offsetValue = 'fizzy water';
+
+      const state = {
+        bookmarks: {
+          [streamId]: {
+            [bookmarkKey]: bookmarkValue,
+            offset: offsetValue,
+          },
+        },
+        currently_syncing: streamId,
+      };
+
+      // Case with no value to fall back on
+      expect(bookmarks.getCurrentlySyncing(state)).toEqual(streamId);
+
+      // Case with a given default
+      expect(bookmarks.getCurrentlySyncing(state, 'default_value')).toEqual(
+        streamId,
+      );
+    });
   });
 });
