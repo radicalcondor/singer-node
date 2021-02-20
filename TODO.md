@@ -11,6 +11,9 @@
 - [x] Utility classes for generating SCHEMA, RECORD, CATALOG and METRIC messages
 - [x] Use `make-error` to properly create equivalents for Singer exceptions
 
+## Improvements
+- [ ] User `faker.random` for test fixture data 
+
 ## Test Parity
 
 Notes on matching test parity:
