@@ -2,17 +2,19 @@ import * as logger from './logger';
 
 import { CatalogEntry, CatalogEntryMetadataType } from './CatalogEntry';
 import { Catalog } from './Catalog';
+import { JsonSchemaType } from '../types';
 
 jest.mock('./logger');
 
 const createStreamEntry = (
   streamId: string,
   metadata: CatalogEntryMetadataType[] = [],
+  schema: JsonSchemaType = {},
 ) => {
   return {
     stream: 's',
     tap_stream_id: streamId,
-    schema: {},
+    schema,
     metadata,
   };
 };
@@ -42,7 +44,39 @@ describe('Catalog', () => {
       expect(actual).toEqual([selectedEntry]);
     });
 
-    it.skip('should resume a currently syncing stream', () => {});
+    it('should resume a currently syncing stream', () => {
+      const selectedEntryA = new CatalogEntry(
+        createStreamEntry('a', [
+          {
+            metadata: {
+              selected: true,
+            },
+            breadcrumb: [],
+          },
+        ]),
+      );
+
+      const selectedEntryC = new CatalogEntry(
+        createStreamEntry('c', [
+          {
+            metadata: {
+              selected: true,
+            },
+            breadcrumb: [],
+          },
+        ]),
+      );
+
+      const catalog = new Catalog([
+        selectedEntryA,
+        new CatalogEntry(createStreamEntry('b')),
+        selectedEntryC,
+      ]);
+      const state = { currently_syncing: 'c' };
+
+      const [first] = catalog.getSelectedStreams(state);
+      expect(first).toEqual(selectedEntryC);
+    });
   });
 
   describe('#getStream', () => {

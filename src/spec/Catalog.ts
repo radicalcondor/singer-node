@@ -1,5 +1,6 @@
 import * as logger from './logger';
 import { CatalogEntry, CatalogEntryType } from './CatalogEntry';
+import { BookmarksStateType, getCurrentlySyncing } from './bookmarks';
 
 const isCatalogEntryInstance = (
   possibleCatalog: CatalogEntryType,
@@ -38,8 +39,17 @@ export class Catalog implements CatalogType {
     });
   };
 
-  getSelectedStreams = () => {
-    return this.streams.filter(stream => {
+  private shuffleStreams = (state: BookmarksStateType = {}) => {
+    const currentlySyncingStream = getCurrentlySyncing(state);
+
+    if (!currentlySyncingStream) {
+      return this.streams;
+    }
+    return this.streams.reverse();
+  };
+
+  getSelectedStreams = (state?: BookmarksStateType): CatalogEntryType[] => {
+    return this.shuffleStreams(state).filter(stream => {
       if (stream.isSelected()) {
         logger.info(`Skipping stream: ${stream.tap_stream_id}`);
         return true;
