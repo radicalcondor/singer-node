@@ -1,7 +1,7 @@
 import { parseMessage } from './parseMessage';
 import { SingerError } from '../errors';
 
-describe(parseMessage.name, () => {
+describe(`#${parseMessage.name}`, () => {
   it('should fail to parse invalid JSON', () => {
     const RAW_MESSAGE = '{"foo":"bar"';
     expect(() => parseMessage(RAW_MESSAGE)).toThrow(SingerError);
