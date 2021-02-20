@@ -3,6 +3,7 @@ import get from 'lodash.get';
 import set from 'lodash.set';
 
 export type BookmarksStateType = {
+  currently_syncing?: string;
   bookmarks?: {
     [key: string]: any;
     offset?: string;
@@ -98,7 +99,5 @@ export const getOffset = <T>(
 
 export const getCurrentlySyncing = (
   state: BookmarksStateType,
-  _default: any,
-): BookmarksStateType => {
-  return state;
-};
+  defaultValue: any = undefined,
+): BookmarksStateType => get(state, 'currently_syncing', defaultValue);
