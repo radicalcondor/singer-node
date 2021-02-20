@@ -2,6 +2,7 @@
 
 - [ ] Implement `VERSION` message
 - [ ] Reach test parity with `singer-python`
+- [ ] Use `invariant` or something for handling these
 - [ ] Use `yup` to validate and to [replace `*Type` interfaces](https://medium.com/@maurice.de.beijer/yup-validation-and-typescript-and-formik-6c342578a20e)
 - [ ] HTTP client capable of caching and managing OAuth tokens
 - [ ] Denoify library
@@ -26,9 +27,9 @@ Notes on matching test parity:
 | `test_bookmarks.py#TestGetBookmark#test_non_empty_state`                                            | `bookmarks#getBookmark#should retrieve values when state is provided`                    | ⚠️      |
 | `test_bookmarks.py#TestGetOffset#test_empty_state`                                                  | `bookmarks#getOffset#should provide defaults when no state is provided`                  | ⚠️      |
 | `test_bookmarks.py#TestGetOffset#test_empty_bookmark`                                               | `bookmarks#getOffset#should provide defaults when no bookmarks exist`                    | ⚠️      |
-| `test_bookmarks.py#TestGetOffset#test_non_empty_state`                                              | `bookmarks#getOffset#should retrieve values when state is provided`                      | ⚠️      |
-| `test_bookmarks.py#TestGetCurrentlySyncing#test_empty_state`                                        | `bookmarks#getCurrentlySyncing#should provide defaults when no state is provided`        | ⚠️      |
-| `test_bookmarks.py#TestGetCurrentlySyncing#test_non_empty_state`                                    | `bookmarks#getCurrentlySyncing#should retrieve values when state is provided`            | ⚠️      |
+| `test_bookmarks.py#TestGetOffset#test_non_empty_state`                                              | `bookmarks#getOffset#should retrieve values when state is provided`                      | ✅️     |
+| `test_bookmarks.py#TestGetCurrentlySyncing#test_empty_state`                                        | `bookmarks#getCurrentlySyncing#should provide defaults when no state is provided`        | ✅️️    |
+| `test_bookmarks.py#TestGetCurrentlySyncing#test_non_empty_state`                                    | `bookmarks#getCurrentlySyncing#should retrieve values when state is provided`            | ✅️     |
 | `test_catalog.py#TestWriteCatalog#test_write_empty_catalog`                                         | N/A                                                                                      | ⛔️     |
 | `test_catalog.py#TestWriteCatalog#test_write_catalog_with_streams`                                  | N/A                                                                                      | ⛔️     |
 | `test_catalog.py#TestGetSelectedStreams#test_one_selected_stream`                                   | `Catalog#getSelectedStreams#should get a single selected stream`                         | ✅      |
