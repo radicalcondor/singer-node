@@ -1,6 +1,10 @@
 import * as logger from './logger';
 
-import { CatalogEntry, CatalogEntryMetadataType } from './CatalogEntry';
+import {
+  CatalogEntry,
+  CatalogEntryMetadataType,
+  CatalogEntryType,
+} from './CatalogEntry';
 import { Catalog } from './Catalog';
 import { JsonSchemaType } from '../types';
 
@@ -10,7 +14,7 @@ const createStreamEntry = (
   streamId: string,
   metadata: CatalogEntryMetadataType[] = [],
   schema: JsonSchemaType = {},
-) => {
+): CatalogEntryType => {
   return {
     stream: 's',
     tap_stream_id: streamId,
@@ -88,6 +92,97 @@ describe('Catalog', () => {
       ]);
       const entry = catalog.getStream('b');
       expect(entry?.tap_stream_id).toEqual('b');
+    });
+  });
+
+  describe('Serialization', () => {
+    const RAW_CATALOG = {
+      streams: [
+        {
+          stream: 'users',
+          tap_stream_id: 'prod_users',
+          stream_alias: 'users_alias',
+          database_name: 'prod',
+          table_name: 'users',
+          schema: {
+            type: 'object',
+            selected: true,
+            properties: {
+              id: { type: 'integer', selected: true },
+              name: { type: 'string', selected: true },
+            },
+          },
+          metadata: [
+            {
+              metadata: {
+                'metadata-key': 'metadata-value',
+              },
+              breadcrumb: ['properties', 'name'],
+            },
+          ],
+        },
+        {
+          stream: 'orders',
+          tap_stream_id: 'prod_orders',
+          database_name: 'prod',
+          table_name: 'orders',
+          schema: {
+            type: 'object',
+            selected: true,
+            properties: {
+              id: { type: 'integer', selected: true },
+              amount: { type: 'number', selected: true },
+            },
+          },
+        },
+      ],
+    };
+    const catalog = new Catalog([
+      new CatalogEntry({
+        stream: 'users',
+        tap_stream_id: 'prod_users',
+        stream_alias: 'users_alias',
+        database_name: 'prod',
+        table_name: 'users',
+        schema: {
+          type: 'object',
+          selected: true,
+          properties: {
+            id: { type: 'integer', selected: true },
+            name: { type: 'string', selected: true },
+          },
+        },
+        metadata: [
+          {
+            metadata: {
+              'metadata-key': 'metadata-value',
+            },
+            breadcrumb: ['properties', 'name'],
+          },
+        ],
+      }),
+      new CatalogEntry({
+        stream: 'orders',
+        tap_stream_id: 'prod_orders',
+        database_name: 'prod',
+        table_name: 'orders',
+        schema: {
+          type: 'object',
+          selected: true,
+          properties: {
+            id: { type: 'integer', selected: true },
+            amount: { type: 'number', selected: true },
+          },
+        },
+      }),
+    ]);
+
+    it('should serialize all fields to JSON correctly', () => {
+      expect(catalog.toJSON()).toEqual(RAW_CATALOG);
+    });
+
+    it('should serialize all fields to a string correctly', () => {
+      expect(`${catalog}`).toEqual(JSON.stringify(RAW_CATALOG));
     });
   });
 });

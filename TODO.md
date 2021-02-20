@@ -34,8 +34,8 @@ Notes on matching test parity:
 | `test_catalog.py#TestWriteCatalog#test_write_catalog_with_streams`                                  | N/A                                                                                      | ⛔️     |
 | `test_catalog.py#TestGetSelectedStreams#test_one_selected_stream`                                   | `Catalog#getSelectedStreams#should get a single selected stream`                         | ✅      |
 | `test_catalog.py#TestGetSelectedStreams#test_resumes_currently_syncing_stream`                      | `Catalog#getSelectedStreams#should resume a currently syncing stream`                    | ✅      |
-| `test_catalog.py#TestToDictAndFromDict#test_from_dict`                                              | N/A                                                                                      | ⛔️     |
-| `test_catalog.py#TestToDictAndFromDict#test_to_dict`                                                | N/A                                                                                      | ⛔️     |
+| `test_catalog.py#TestToDictAndFromDict#test_from_dict`                                              | `Catalog#Serialization#should serialize all fields to JSON correctly`                    | ✅      |
+| `test_catalog.py#TestToDictAndFromDict#test_to_dict`                                                | `Catalog#Serialization#should serialize all fields to a string correctly`                | ✅      |
 | `test_catalog.py#TestGetStream#test`                                                                | `Catalog#getStream#should get a stream`                                                  | ✅      |
 | `test_exceptions.py#TestSingerErrors#test_SingerError_prints_correctly`                             | `Errors#should throw a SingerError with the correct message`                             | ✅      |
 | `test_exceptions.py#TestSingerErrors#test_SingerConfigurationError_prints_correctly`                | `Errors#should throw a SingerConfigurationError with the correct message`                | ✅      |

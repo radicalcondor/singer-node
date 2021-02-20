@@ -21,7 +21,7 @@ export interface CatalogType {
 }
 
 export class Catalog implements CatalogType {
-  streams: CatalogEntry[];
+  streams: CatalogEntry[] = [];
 
   constructor(streams: CatalogEntryType[]) {
     this.streams = streams.map(stream => {
@@ -52,4 +52,8 @@ export class Catalog implements CatalogType {
       return false;
     });
   };
+
+  toJSON = () => ({ streams: this.streams.map(stream => stream.toJSON()) });
+
+  toString = JSON.stringify(this.toJSON());
 }

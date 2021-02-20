@@ -1,4 +1,4 @@
-import { JsonSchemaType } from '../types';
+import { JsonSchemaType, PrimitiveTypes } from '../types';
 
 export enum StreamReplicationMethods {
   FULL_TABLE = 'FULL_TABLE',
@@ -41,6 +41,8 @@ export enum StreamInclusionTypes {
  */
 export interface CatalogEntryMetadataType {
   metadata: {
+    [key: string]: PrimitiveTypes | PrimitiveTypes[];
+
     /**
      * Indicates that this node in the schema has been selected by the user for
      * replication.
@@ -48,7 +50,7 @@ export interface CatalogEntryMetadataType {
      * @example true
      * @example false
      */
-    readonly selected: boolean;
+    readonly selected?: boolean;
 
     /**
      * The replication method to use for a stream.
@@ -150,14 +152,45 @@ export interface CatalogEntryMetadataType {
  */
 export interface CatalogEntryType<T extends JsonSchemaType = JsonSchemaType> {
   /**
-   * Name of the stream; must match the stream property of the any `SCHEMA`s
-   * available to this Tap.
+   * For a database source, the name of the database.
    */
-  stream: string;
+  database_name?: string;
+
   /**
-   * The time this record was observed in the source.
+   * Indicates whether a stream corresponds to a database view.
+   *
+   * @example true
+   * @example false
    */
-  tap_stream_id: string;
+  is_view?: boolean;
+
+  key_properties?: string[];
+
+  /**
+   * @see CatalogEntryMetadataType
+   */
+  metadata?: CatalogEntryMetadataType[];
+
+  /**
+   * The name of a property in the source to use as a "bookmark". For example,
+   * this will often be an "updated-at" field or an auto-incrementing primary
+   * key (requires `replication-method`).
+   */
+  replication_key?: string;
+
+  /**
+   * The replication method to use for a stream.
+   *
+   * @example FULL_TABLE
+   * @example INCREMENTAL
+   * @example LOG_BASED.
+   */
+  replication_method?: StreamReplicationMethods;
+
+  /**
+   * Number of rows in a database table/view.
+   */
+  row_count?: number;
 
   /**
    * The JSON schema for the stream.
@@ -165,34 +198,59 @@ export interface CatalogEntryType<T extends JsonSchemaType = JsonSchemaType> {
   schema: T;
 
   /**
+   * Name of the stream; must match the stream property of the any `SCHEMA`s
+   * available to this Tap.
+   */
+  stream: string;
+
+  /**
+   * An aliased name of the stream.
+   */
+  stream_alias?: string;
+
+  /**
    * For a database source, the name of the table.
    */
   table_name?: string;
 
   /**
-   * @see CatalogEntryMetadataType
+   * The time this record was observed in the source.
    */
-  metadata?: CatalogEntryMetadataType[];
+  tap_stream_id: string;
 }
 
 type CompiledMetadata = Record<string, CatalogEntryMetadataType['metadata']>;
 
 export class CatalogEntry<T extends JsonSchemaType = JsonSchemaType>
   implements CatalogEntryType<T> {
-  metadata: CatalogEntryType<T>['metadata'];
   compiledMetadata: CompiledMetadata;
+  database_name?: CatalogEntryType<T>['database_name'];
+  is_view: CatalogEntryType<T>['is_view'];
+  key_properties: CatalogEntryType<T>['key_properties'];
+  metadata: CatalogEntryType<T>['metadata'];
+  replication_key: CatalogEntryType<T>['replication_key'];
+  replication_method: CatalogEntryType<T>['replication_method'];
+  row_count: CatalogEntryType<T>['row_count'];
   schema: CatalogEntryType<T>['schema'];
   stream: CatalogEntryType<T>['stream'];
+  stream_alias: CatalogEntryType<T>['stream_alias'];
   table_name?: CatalogEntryType<T>['table_name'];
   tap_stream_id: CatalogEntryType<T>['tap_stream_id'];
 
   constructor(options: CatalogEntryType<T>) {
-    this.schema = options.schema;
-    this.stream = options.stream;
-    this.table_name = options.table_name;
     this.tap_stream_id = options.tap_stream_id;
+    this.stream = options.stream;
+    this.key_properties = options.key_properties;
+    this.schema = options.schema;
+    this.replication_key = options.replication_key;
+    this.is_view = options.is_view;
+    this.database_name = options.database_name;
+    this.table_name = options.table_name;
+    this.row_count = options.row_count;
+    this.stream_alias = options.stream_alias;
     this.metadata = options.metadata;
     this.compiledMetadata = this.convertMetadataToMap(options.metadata);
+    this.replication_method = options.replication_method;
   }
 
   convertMetadataToMap = (metadata: CatalogEntryMetadataType[] = []) => {
@@ -208,4 +266,21 @@ export class CatalogEntry<T extends JsonSchemaType = JsonSchemaType>
   isSelected = () => {
     return this.compiledMetadata['']?.selected;
   };
+
+  toJSON = () => ({
+    database_name: this.database_name,
+    is_view: this.is_view,
+    key_properties: this.key_properties,
+    metadata: this.metadata,
+    replication_key: this.replication_key,
+    replication_method: this.replication_method,
+    row_count: this.row_count,
+    schema: this.schema,
+    stream: this.stream,
+    stream_alias: this.stream_alias,
+    table_name: this.table_name,
+    tap_stream_id: this.tap_stream_id,
+  });
+
+  toString = () => JSON.stringify(this.toJSON());
 }
