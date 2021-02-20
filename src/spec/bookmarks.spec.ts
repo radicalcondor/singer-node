@@ -1,11 +1,10 @@
-import { StateMessageType } from './messages/StateMessage';
 import * as bookmarks from './bookmarks';
-import { MessageTypes } from './messages/Message';
+import { BookmarksStateType } from './bookmarks';
 
 describe('bookmarks', () => {
   describe(`#${bookmarks.getBookmark.name}`, () => {
     it('should provide defaults when no state is provided', () => {
-      const state = {} as StateMessageType<undefined>;
+      const state: BookmarksStateType = {};
 
       // Case with no value to fall back on
       expect(
@@ -19,43 +18,33 @@ describe('bookmarks', () => {
     });
 
     it('should provide defaults when no bookmarks exist', () => {
-      const state = {
-        value: {
-          bookmarks: {},
-        },
-        type: MessageTypes.STATE,
-      } as StateMessageType<{ bookmarks: any }>;
+      const state: BookmarksStateType = {
+        bookmarks: {},
+      };
 
       // Case with no value to fall back on
       expect(
-        bookmarks.getBookmark(state.value.bookmarks, 'some_stream', 'my_key'),
+        bookmarks.getBookmark(state, 'some_stream', 'my_key'),
       ).toBeUndefined();
 
       // Case with a given default
       expect(
-        bookmarks.getBookmark(
-          state.value.bookmarks,
-          'some_stream',
-          'my_key',
-          'default_value',
-        ),
+        bookmarks.getBookmark(state, 'some_stream', 'my_key', 'default_value'),
       ).toEqual('default_value');
     });
+
     it('should retrieve values when state is provided', () => {
       const streamId = 'customers';
       const bookmarkKey = 'datetime';
       const bookmarkValue = 123456789;
 
-      const state = {
-        value: {
-          bookmarks: {
-            [streamId]: {
-              [bookmarkKey]: bookmarkValue,
-            },
+      const state: BookmarksStateType = {
+        bookmarks: {
+          [streamId]: {
+            [bookmarkKey]: bookmarkValue,
           },
         },
-        type: MessageTypes.STATE,
-      } as StateMessageType<{ bookmarks: { customers: { datetime: number } } }>;
+      };
 
       /*
         Cases with no value to fall back on
@@ -104,13 +93,51 @@ describe('bookmarks', () => {
     });
   });
 
-  describe('#getOffset', () => {
+  describe(`#${bookmarks.getOffset.name}`, () => {
     it('should provide defaults when no state is provided', () => {});
     it('should provide defaults when no bookmarks exist', () => {});
-    it('should retrieve values when state is provided', () => {});
+    it('should retrieve values when state is provided', () => {
+      const streamId = 'customers';
+      const bookmarkKey = 'datetime';
+      const bookmarkValue = 123456789;
+      const offsetValue = 'fizzy water';
+
+      const state: BookmarksStateType = {
+        bookmarks: {
+          [streamId]: {
+            [bookmarkKey]: bookmarkValue,
+            offset: offsetValue,
+          },
+        },
+      };
+
+      /**
+       * Cases with no value to fall back on
+       */
+
+      // Bad stream
+      expect(bookmarks.getOffset(state, 'some_stream'));
+
+      // Good stream
+      expect(bookmarks.getOffset(state, streamId)).toEqual(offsetValue);
+
+      /**
+       * Case with a given default
+       */
+
+      // Bad stream
+      expect(
+        bookmarks.getOffset(state, 'some_stream', 'default_value'),
+      ).toEqual('default_value');
+
+      // Good stream
+      expect(bookmarks.getOffset(state, streamId, 'default_value')).toEqual(
+        offsetValue,
+      );
+    });
   });
 
-  describe('#getCurrentlySyncing', () => {
+  describe(`#${bookmarks.getCurrentlySyncing.name}`, () => {
     it('should provide defaults when no state is provided', () => {});
     it('should retrieve values when state is provided', () => {});
   });
