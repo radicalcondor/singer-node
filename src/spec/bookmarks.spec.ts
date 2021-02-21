@@ -95,36 +95,28 @@ describe('bookmarks', () => {
 
   describe(`#${bookmarks.getOffset.name}`, () => {
     it.skip('should provide defaults when no state is provided', () => {
-
       const state: BookmarksStateType = {};
 
       // Case with no value to fall back on
-      expect(
-        bookmarks.getOffset(state, 'some_stream'),
-      ).toBeUndefined();
+      expect(bookmarks.getOffset(state, 'some_stream')).toBeUndefined();
 
       // Case with a given default
-      expect(
-        bookmarks.getOffset(state, 'some_stream', 'default_value'),
-      ).toBe('default_value');
-
+      expect(bookmarks.getOffset(state, 'some_stream', 'default_value')).toBe(
+        'default_value',
+      );
     });
     it.skip('should provide defaults when no bookmarks exist', () => {
-
       const state: BookmarksStateType = {
         bookmarks: {},
       };
 
       // Case with no value to fall back on
-      expect(
-        bookmarks.getOffset(state, 'some_stream'),
-      ).toBeUndefined();
+      expect(bookmarks.getOffset(state, 'some_stream')).toBeUndefined();
 
       // Case with a given default
       expect(
         bookmarks.getOffset(state, 'some_stream', 'default_value'),
       ).toEqual('default_value');
-
     });
 
     it('should retrieve values when state is provided', () => {
@@ -217,7 +209,7 @@ describe('bookmarks', () => {
       expect(path).toEqual(`bookmarks.customers`);
       expect(path1).toEqual(`bookmarks.customers.test`);
       expect(path2).toEqual(`bookmarks.customers.foo.bar`);
-    }); 
+    });
 
     it('should return updated state when calling `setState`', () => {
       const streamId = 'customers';
@@ -226,7 +218,7 @@ describe('bookmarks', () => {
       const value = 'test';
       const newState = bookmarks.setState(state, path, value);
 
-      expect(newState).toEqual({bookmarks: { [streamId]: { inner: value } }});
-    })    
-  })
+      expect(newState).toEqual({ bookmarks: { [streamId]: { inner: value } } });
+    });
+  });
 });
