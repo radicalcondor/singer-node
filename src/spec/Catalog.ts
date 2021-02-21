@@ -55,5 +55,5 @@ export class Catalog implements CatalogType {
 
   toJSON = () => ({ streams: this.streams.map(stream => stream.toJSON()) });
 
-  toString = JSON.stringify(this.toJSON());
+  toString = () => JSON.stringify(this.toJSON());
 }
