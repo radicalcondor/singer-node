@@ -1,8 +1,8 @@
 # TODO
 
-- [ ] Implement `VERSION` message
 - [ ] Reach test parity with `singer-python`
-- [ ] Use `invariant` or something for handling these
+- [ ] Implement `VERSION` message
+- [ ] Use `invariant` or something for handling errors
 - [ ] Use `yup` to validate and to [replace `*Type` interfaces](https://medium.com/@maurice.de.beijer/yup-validation-and-typescript-and-formik-6c342578a20e)
 - [ ] HTTP client capable of caching and managing OAuth tokens
 - [ ] Denoify library
@@ -12,7 +12,7 @@
 - [x] Use `make-error` to properly create equivalents for Singer exceptions
 
 ## Improvements
-- [ ] User `faker.random` for test fixture data 
+- [ ] User `faker.random` for test fixture data
 
 ## Test Parity
 
