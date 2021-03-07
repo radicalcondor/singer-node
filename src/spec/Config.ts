@@ -1,6 +1,7 @@
 import { StateMessageType } from './messages/StateMessage';
 import { CatalogType } from './Catalog';
 
+/* eslint-disable camelcase */
 /**
  * The config file contains whatever parameters the Tap needs in order to pull
  * data from the source. Typically this will include the credentials for the API
@@ -28,6 +29,7 @@ export interface ConfigType {
    */
   api_key?: string;
 }
+/* eslint-enable camelcase */
 
 /**
  * This object contains all input provided to the Tap. This includes all

@@ -1,23 +1,25 @@
 import get from 'lodash.get';
 import set from 'lodash.set';
 
+export type BookmarkValue = any;
+
+/* eslint-disable camelcase */
 export type BookmarksStateType = {
   currently_syncing?: string;
   bookmarks?: {
-    [key: string]: any;
+    [key: string]: BookmarkValue;
     offset?: string;
   };
 };
+/* eslint-enable camelcase */
 
-export type BookmarkValue = any;
-
-export const getPath = (tapStreamId: string, ...paths: string[]) =>
+export const getPath = (tapStreamId: string, ...paths: string[]): string =>
   `bookmarks.${tapStreamId}${paths.length > 0 ? `.${paths.join('.')}` : ''}`;
 
 export const setState = (
   state: BookmarksStateType,
   path: string,
-  value?: any,
+  value?: BookmarkValue,
 ): BookmarksStateType => set({ ...state }, path, value);
 
 export const writeBookmark = (
@@ -31,8 +33,8 @@ export const getBookmark = (
   state: BookmarksStateType,
   tapStreamId: string,
   key: string,
-  _default?: BookmarkValue,
-): BookmarkValue => get(state, getPath(tapStreamId, key), _default);
+  defaultValue?: BookmarkValue,
+): BookmarkValue => get(state, getPath(tapStreamId, key), defaultValue);
 
 export const clearBookmark = (
   state: BookmarksStateType,
@@ -75,5 +77,5 @@ export const setCurrentlySyncing = (
 
 export const getCurrentlySyncing = (
   state: BookmarksStateType,
-  defaultValue: any = undefined,
+  defaultValue?: BookmarkValue,
 ): BookmarksStateType => get(state, 'currently_syncing', defaultValue);

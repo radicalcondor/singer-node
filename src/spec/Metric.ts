@@ -32,6 +32,8 @@ export interface TagsType {
    */
   endpoint?: string;
 
+  /* eslint-disable camelcase */
+
   /**
    * The HTTP status code.
    *
@@ -51,10 +53,12 @@ export interface TagsType {
    */
   job_type?: string;
 
+  /* eslint-enable camelcase */
+
   /**
    * The status of the event. Can be either "succeeded" or "failed".
    */
-  status: TagStatuses;
+  status?: TagStatuses;
 }
 
 /**
@@ -96,8 +100,11 @@ export interface MetricType {
 
 export class Metric implements MetricType {
   type: MetricType['type'];
+
   metric: MetricType['metric'];
+
   value: MetricType['value'];
+
   tags: MetricType['tags'];
 
   constructor(options: MetricType) {
@@ -107,12 +114,12 @@ export class Metric implements MetricType {
     this.tags = options.tags;
   }
 
-  toString = () => {
+  toString = (): string => {
     return `INFO METRIC: ${JSON.stringify({
-      type: this.type,
       metric: this.metric,
-      value: this.value,
       tags: this.tags,
+      type: this.type,
+      value: this.value,
     })}`;
   };
 }
@@ -158,7 +165,7 @@ export interface TimerType extends MetricType {
  *    "value": 1.23,
  *    "tags": {
  *      "endpoint": "users",
- *      "status": "success"
+ *      "status": "succeeded"
  *    }
  * }
  * ```

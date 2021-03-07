@@ -31,6 +31,8 @@ export interface SchemaMessageType<T extends JsonSchemaType = JsonSchemaType>
    */
   stream: string;
 
+  /* eslint-disable camelcase */
+
   /**
    * A list of strings indicating which properties make up
    * the primary key for this stream. Each item in the list must be the
@@ -46,6 +48,8 @@ export interface SchemaMessageType<T extends JsonSchemaType = JsonSchemaType>
    */
   bookmark_properties?: string[];
 
+  /* eslint-enable camelcase */
+
   /**
    * A JSON Schema describing the data property of `RECORD` objects from the same stream.
    */
@@ -57,9 +61,15 @@ type SchemaOptions<T> = Omit<SchemaMessageType<T>, 'type'>;
 export class SchemaMessage<T extends JsonSchemaType = JsonSchemaType>
   implements SchemaMessageType<T> {
   readonly type = MessageTypes.SCHEMA;
+
+  /* eslint-disable camelcase */
+
   stream: SchemaMessageType<T>['stream'];
+
   key_properties: SchemaMessageType<T>['key_properties'];
+
   bookmark_properties?: SchemaMessageType<T>['bookmark_properties'];
+
   schema: SchemaMessageType<T>['schema'];
 
   constructor(options: SchemaOptions<T>) {
@@ -74,13 +84,15 @@ export class SchemaMessage<T extends JsonSchemaType = JsonSchemaType>
     this.schema = options.schema;
   }
 
-  toString = () => {
+  /* eslint-enable camelcase */
+
+  toString = (): string => {
     return JSON.stringify({
-      type: this.type,
-      stream: this.stream,
-      key_properties: this.key_properties,
       bookmark_properties: this.bookmark_properties,
+      key_properties: this.key_properties,
       schema: this.schema,
+      stream: this.stream,
+      type: this.type,
     });
   };
 }

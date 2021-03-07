@@ -1,27 +1,42 @@
-import * as errors from './';
+import * as errors from '.';
 
 const MESSAGE = 'An error occurred';
+const MULTILINE_MESSAGE = ['Line 1', 'Line 2', 'Line 3'].join('\n');
 
 describe('errors', () => {
-  it('should throw a SingerError with the correct message', () => {
-    try {
+  it(`should throw a ${errors.SingerError.name} with the correct message`, () => {
+    expect(() => {
       throw new errors.SingerError(MESSAGE);
-    } catch (e) {
-      expect(e.message).toEqual(`SingerError\n${MESSAGE}`);
-    }
+    }).toThrow(`SingerError\n${MESSAGE}`);
   });
 
-  it('should throw a SingerError with the correct multiline message', () => {
-    const MULTILINE_MESSAGE = ['Line 1', 'Line 2', 'Line 3'].join('\n');
-    try {
+  it(`should throw a ${errors.SingerError.name} with the correct multiline message`, () => {
+    expect(() => {
       throw new errors.SingerError(MULTILINE_MESSAGE);
-    } catch (e) {
-      expect(e.message).toEqual(`SingerError\n${MULTILINE_MESSAGE}`);
-    }
+    }).toThrow(`SingerError\n${MULTILINE_MESSAGE}`);
   });
 
-  it.skip('should throw a SingerConfigurationError with the correct message', () => {});
-  it.skip('should throw a SingerDiscoveryError with the correct message', () => {});
-  it.skip('should throw a SingerSyncError with the correct message', () => {});
-  it.skip('should throw a SingerRetryableRequestError with the correct message', () => {});
+  it(`should throw a ${errors.SingerConfigurationError.name} with the correct message`, () => {
+    expect(() => {
+      throw new errors.SingerConfigurationError(MESSAGE);
+    }).toThrow(`SingerConfigurationError\n${MESSAGE}`);
+  });
+
+  it(`should throw a ${errors.SingerDiscoveryError.name} with the correct message`, () => {
+    expect(() => {
+      throw new errors.SingerDiscoveryError(MESSAGE);
+    }).toThrow(`SingerDiscoveryError\n${MESSAGE}`);
+  });
+
+  it(`should throw a ${errors.SingerSyncError.name} with the correct message`, () => {
+    expect(() => {
+      throw new errors.SingerSyncError(MESSAGE);
+    }).toThrow(`SingerSyncError\n${MESSAGE}`);
+  });
+
+  it(`should throw a ${errors.SingerRetryableRequestError.name} with the correct message`, () => {
+    expect(() => {
+      throw new errors.SingerRetryableRequestError(MESSAGE);
+    }).toThrow(`SingerRetryableRequestError\n${MESSAGE}`);
+  });
 });

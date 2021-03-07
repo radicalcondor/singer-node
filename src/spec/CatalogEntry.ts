@@ -147,6 +147,7 @@ export interface CatalogEntryMetadataType {
   breadcrumb: string[];
 }
 
+/* eslint-disable camelcase */
 /**
  * @link https://github.com/singer-io/getting-started/blob/master/docs/DISCOVERY_MODE.md#the-catalog
  */
@@ -219,22 +220,38 @@ export interface CatalogEntryType<T extends JsonSchemaType = JsonSchemaType> {
   tap_stream_id: string;
 }
 
+/* eslint-enable camelcase */
+
 type CompiledMetadata = Record<string, CatalogEntryMetadataType['metadata']>;
 
 export class CatalogEntry<T extends JsonSchemaType = JsonSchemaType>
   implements CatalogEntryType<T> {
+  /* eslint-disable camelcase */
+
   compiledMetadata: CompiledMetadata;
+
   database_name?: CatalogEntryType<T>['database_name'];
+
   is_view: CatalogEntryType<T>['is_view'];
+
   key_properties: CatalogEntryType<T>['key_properties'];
+
   metadata: CatalogEntryType<T>['metadata'];
+
   replication_key: CatalogEntryType<T>['replication_key'];
+
   replication_method: CatalogEntryType<T>['replication_method'];
+
   row_count: CatalogEntryType<T>['row_count'];
+
   schema: CatalogEntryType<T>['schema'];
+
   stream: CatalogEntryType<T>['stream'];
+
   stream_alias: CatalogEntryType<T>['stream_alias'];
+
   table_name?: CatalogEntryType<T>['table_name'];
+
   tap_stream_id: CatalogEntryType<T>['tap_stream_id'];
 
   constructor(options: CatalogEntryType<T>) {
@@ -253,7 +270,11 @@ export class CatalogEntry<T extends JsonSchemaType = JsonSchemaType>
     this.replication_method = options.replication_method;
   }
 
-  convertMetadataToMap = (metadata: CatalogEntryMetadataType[] = []) => {
+  /* eslint-enable camelcase */
+
+  convertMetadataToMap = (
+    metadata: CatalogEntryMetadataType[] = [],
+  ): CompiledMetadata => {
     return metadata.reduce((result, value) => {
       const key = value.breadcrumb.join('');
       return {
@@ -263,11 +284,12 @@ export class CatalogEntry<T extends JsonSchemaType = JsonSchemaType>
     }, {} as CompiledMetadata);
   };
 
-  isSelected = () => {
-    return this.compiledMetadata['']?.selected;
+  isSelected = (): boolean => {
+    return this.compiledMetadata['']?.selected ?? false;
   };
 
-  toJSON = () => ({
+  /* eslint-disable camelcase */
+  toJSON = (): CatalogEntryType<T> => ({
     database_name: this.database_name,
     is_view: this.is_view,
     key_properties: this.key_properties,
@@ -281,6 +303,7 @@ export class CatalogEntry<T extends JsonSchemaType = JsonSchemaType>
     table_name: this.table_name,
     tap_stream_id: this.tap_stream_id,
   });
+  /* eslint-enable camelcase */
 
-  toString = () => JSON.stringify(this.toJSON());
+  toString = (): string => JSON.stringify(this.toJSON());
 }

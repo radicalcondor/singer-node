@@ -5,19 +5,19 @@ import { SingerSyncError } from '../errors';
 describe(SchemaMessage.name, () => {
   it('should successfully parse a message', () => {
     const RAW_MESSAGE =
-      '{"type": "SCHEMA", "stream": "users", "schema": {"type": "object", "properties": {"name": {"type": "string"}}}, "key_properties": ["name"]}';
+      '{"type": "SCHEMA", "stream": "users", "schema": {"properties": {"name": {"type": "string"}}, "type": "object"}, "key_properties": ["name"]}';
     const actual = parseMessage(RAW_MESSAGE);
     const expected = new SchemaMessage({
-      stream: 'users',
       key_properties: ['name'],
       schema: {
-        type: 'object',
         properties: {
           name: {
             type: 'string',
           },
         },
+        type: 'object',
       },
+      stream: 'users',
     });
 
     expect(actual).toBeDefined();

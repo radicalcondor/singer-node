@@ -4,8 +4,8 @@ import { SchemaMessage, SchemaMessageType } from './SchemaMessage';
 import { SingerError } from '../errors';
 import { StateMessage, StateMessageType } from './StateMessage';
 
-const isMessage = (message: object): message is MessageType => {
-  return 'type' in message;
+const isMessage = (message: unknown): message is MessageType => {
+  return 'type' in (message as Record<string, unknown>);
 };
 
 const isRecord = (message: MessageType): message is RecordMessageType => {
@@ -21,19 +21,19 @@ const isState = (message: MessageType): message is StateMessageType => {
 };
 
 type ParserFn<T extends MessageType> = (message: MessageType) => T | false;
-type AllMessageTypes = RecordMessageType | SchemaMessageType;
+type AllMessageTypes = RecordMessageType | SchemaMessageType | StateMessageType;
 type MessageParsers = Record<MessageTypes, ParserFn<AllMessageTypes>>;
 
 const MESSAGE_PARSERS: MessageParsers = {
-  [MessageTypes.RECORD]: (message: any) =>
+  [MessageTypes.RECORD]: message =>
     isRecord(message) && new RecordMessage(message),
-  [MessageTypes.SCHEMA]: (message): any =>
+  [MessageTypes.SCHEMA]: message =>
     isSchema(message) && new SchemaMessage(message),
-  [MessageTypes.STATE]: (message): any =>
+  [MessageTypes.STATE]: message =>
     isState(message) && new StateMessage(message.value),
 };
 
-export const parseMessage = (messageString: string) => {
+export const parseMessage = (messageString: string): MessageType => {
   let message;
   try {
     message = JSON.parse(messageString);
@@ -53,5 +53,10 @@ export const parseMessage = (messageString: string) => {
     throw new SingerError('Invalid message type');
   }
 
-  return parser(message);
+  const result = parser(message);
+  if (!result) {
+    throw new SingerError('Unable to parse message');
+  }
+
+  return result;
 };

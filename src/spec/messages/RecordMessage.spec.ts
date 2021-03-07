@@ -19,7 +19,7 @@ describe(RecordMessage.name, () => {
     expect(`${actual}`).toEqual(`${expected}`);
   });
 
-  it.skip('should successfully parse a message with a version', () => {
+  it('should successfully parse a message with a version', () => {
     const RAW_MESSAGE =
       '{"type": "RECORD", "record": {"name": "foo"}, "stream": "users", "version": 2}';
 
@@ -29,7 +29,6 @@ describe(RecordMessage.name, () => {
         name: 'foo',
       },
       stream: 'users',
-      // @ts-ignore
       version: 2,
     });
 
@@ -37,14 +36,16 @@ describe(RecordMessage.name, () => {
     expect(`${actual}`).toEqual(`${expected}`);
   });
 
+  /**
+   * @TODO Doesn't seem to throw error
+   */
   it.skip('should fail to parse a message with a date without a timezone', () => {
     const RAW_MESSAGE =
       '{"type": "RECORD", "record": {"name": "foo"}, "stream": "users", "version": 2, "time_extracted": "1970-01-02T00:00:00"}';
-    try {
+
+    expect(() => {
       parseMessage(RAW_MESSAGE);
-    } catch (e) {
-      // Throw an error because datetime doesn't include timezone
-    }
+    }).toThrow(`SingerError`);
   });
 
   it('should successfully parse a message with a date with a timezone', () => {
@@ -57,9 +58,8 @@ describe(RecordMessage.name, () => {
         name: 'foo',
       },
       stream: 'users',
-      // @ts-ignore
-      version: 2,
       time_extracted: new Date('1970-01-02T00:00:00.000Z'),
+      version: 2,
     });
 
     expect(actual).toBeDefined();
@@ -75,12 +75,11 @@ describe(RecordMessage.name, () => {
         name: 'foo',
       },
       stream: 'users',
-      // @ts-ignore
-      version: 2,
       time_extracted: new Date('1970-01-02T00:00:00.000Z'),
+      version: 2,
     });
 
-    expect(record.time_extracted).toEqual('1970-01-02T00:00:00.000000Z');
+    expect(record.time_extracted).toEqual('1970-01-02T00:00:00.0000Z');
   });
 
   it('should fail to parse a message with a missing record', () => {

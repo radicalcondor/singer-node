@@ -16,23 +16,23 @@ const createStreamEntry = (
   schema: JsonSchemaType = {},
 ): CatalogEntryType => {
   return {
+    metadata,
+    schema,
     stream: 's',
     tap_stream_id: streamId,
-    schema,
-    metadata,
   };
 };
 
-describe('Catalog', () => {
+describe(Catalog.name, () => {
   describe('#getSelectedStreams', () => {
     it('should get a single selected stream', () => {
       const selectedEntry = new CatalogEntry(
         createStreamEntry('a', [
           {
+            breadcrumb: [],
             metadata: {
               selected: true,
             },
-            breadcrumb: [],
           },
         ]),
       );
@@ -52,10 +52,10 @@ describe('Catalog', () => {
       const selectedEntryA = new CatalogEntry(
         createStreamEntry('a', [
           {
+            breadcrumb: [],
             metadata: {
               selected: true,
             },
-            breadcrumb: [],
           },
         ]),
       );
@@ -63,10 +63,10 @@ describe('Catalog', () => {
       const selectedEntryC = new CatalogEntry(
         createStreamEntry('c', [
           {
+            breadcrumb: [],
             metadata: {
               selected: true,
             },
-            breadcrumb: [],
           },
         ]),
       );
@@ -102,19 +102,19 @@ describe('Catalog', () => {
           database_name: 'prod',
           metadata: [
             {
+              breadcrumb: ['properties', 'name'],
               metadata: {
                 'metadata-key': 'metadata-value',
               },
-              breadcrumb: ['properties', 'name'],
             },
           ],
           schema: {
-            type: 'object',
-            selected: true,
             properties: {
-              id: { type: 'integer', selected: true },
-              name: { type: 'string', selected: true },
+              id: { selected: true, type: 'integer' },
+              name: { selected: true, type: 'string' },
             },
+            selected: true,
+            type: 'object',
           },
           stream: 'users',
           stream_alias: 'users_alias',
@@ -124,12 +124,12 @@ describe('Catalog', () => {
         {
           database_name: 'prod',
           schema: {
-            type: 'object',
-            selected: true,
             properties: {
-              id: { type: 'integer', selected: true },
-              amount: { type: 'number', selected: true },
+              id: { selected: true, type: 'integer' },
+              name: { selected: true, type: 'string' },
             },
+            selected: true,
+            type: 'object',
           },
           stream: 'orders',
           table_name: 'orders',
@@ -142,19 +142,19 @@ describe('Catalog', () => {
         database_name: 'prod',
         metadata: [
           {
+            breadcrumb: ['properties', 'name'],
             metadata: {
               'metadata-key': 'metadata-value',
             },
-            breadcrumb: ['properties', 'name'],
           },
         ],
         schema: {
-          type: 'object',
-          selected: true,
           properties: {
-            id: { type: 'integer', selected: true },
-            name: { type: 'string', selected: true },
+            id: { selected: true, type: 'integer' },
+            name: { selected: true, type: 'string' },
           },
+          selected: true,
+          type: 'object',
         },
         stream: 'users',
         stream_alias: 'users_alias',
@@ -164,12 +164,12 @@ describe('Catalog', () => {
       new CatalogEntry({
         database_name: 'prod',
         schema: {
-          type: 'object',
-          selected: true,
           properties: {
-            id: { type: 'integer', selected: true },
-            amount: { type: 'number', selected: true },
+            id: { selected: true, type: 'integer' },
+            name: { selected: true, type: 'string' },
           },
+          selected: true,
+          type: 'object',
         },
         stream: 'orders',
         table_name: 'orders',

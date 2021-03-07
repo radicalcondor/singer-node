@@ -12,7 +12,7 @@ const schema = yup.object().required();
  *
  * @link https://github.com/singer-io/getting-started/blob/master/docs/SPEC.md#state-message
  */
-export interface StateMessageType<T extends any = any> extends MessageType {
+export interface StateMessageType<T = unknown> extends MessageType {
   readonly type: MessageTypes.STATE;
 
   /**
@@ -21,8 +21,9 @@ export interface StateMessageType<T extends any = any> extends MessageType {
   value: T;
 }
 
-export class StateMessage<T extends {} = {}> implements StateMessageType<T> {
+export class StateMessage<T = unknown> implements StateMessageType<T> {
   readonly type = MessageTypes.STATE;
+
   value: StateMessageType<T>['value'];
 
   constructor(value: StateMessageType<T>['value']) {
@@ -34,7 +35,7 @@ export class StateMessage<T extends {} = {}> implements StateMessageType<T> {
     this.value = value;
   }
 
-  toString = () => {
+  toString = (): string => {
     return JSON.stringify({
       type: this.type,
       value: this.value,

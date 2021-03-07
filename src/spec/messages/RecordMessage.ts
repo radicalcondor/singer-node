@@ -5,9 +5,10 @@ import { MessageType, MessageTypes } from './Message';
 import { SingerSyncError } from '../errors';
 
 const schema = yup.object().shape({
+  record: yup.object().required(),
   stream: yup.string().required(),
   time_extracted: yup.date().optional(),
-  record: yup.object().required(),
+  version: yup.number().optional(),
 });
 
 /**
@@ -26,6 +27,9 @@ export interface RecordMessageType<T extends JsonSchemaType = JsonSchemaType>
    * that describes this `RECORD` type.
    */
   stream: string;
+
+  /* eslint-disable camelcase */
+
   /**
    * The time this record was observed in the source.
    */
@@ -33,7 +37,12 @@ export interface RecordMessageType<T extends JsonSchemaType = JsonSchemaType>
   /**
    * A JSON map containing a streamed data point.
    */
+
+  /* eslint-enable camelcase */
+
   record: T;
+
+  version?: number;
 }
 
 type RecordOptions<T> = Omit<RecordMessageType<T>, 'type'>;
@@ -41,9 +50,16 @@ type RecordOptions<T> = Omit<RecordMessageType<T>, 'type'>;
 export class RecordMessage<T extends JsonSchemaType = JsonSchemaType>
   implements RecordMessageType<T> {
   readonly type = MessageTypes.RECORD;
+
   stream: RecordMessageType<T>['stream'];
+
+  /* eslint-disable camelcase */
+
   time_extracted?: RecordMessageType<T>['time_extracted'];
+
   record: RecordMessageType<T>['record'];
+
+  version: RecordMessageType<T>['version'];
 
   constructor(options: RecordOptions<T>) {
     try {
@@ -54,14 +70,17 @@ export class RecordMessage<T extends JsonSchemaType = JsonSchemaType>
     this.stream = options.stream;
     this.time_extracted = options.time_extracted;
     this.record = options.record;
+    this.version = options.version;
   }
 
-  toString = () => {
+  /* eslint-enable camelcase */
+
+  toString = (): string => {
     return JSON.stringify({
-      type: this.type,
+      record: this.record,
       stream: this.stream,
       time_extracted: this.time_extracted,
-      record: this.record,
+      type: this.type,
     });
   };
 }

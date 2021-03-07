@@ -139,7 +139,7 @@ describe('bookmarks', () => {
        */
 
       // Bad stream
-      expect(bookmarks.getOffset(state, 'some_stream'));
+      expect(bookmarks.getOffset(state, 'some_stream')).not.toBeDefined();
 
       // Good stream
       expect(bookmarks.getOffset(state, streamId)).toEqual(offsetValue);

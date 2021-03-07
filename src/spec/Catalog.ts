@@ -33,13 +33,13 @@ export class Catalog implements CatalogType {
     });
   }
 
-  getStream = (tap_stream_id: string) => {
+  getStream = (tapStreamId: string): CatalogEntryType | undefined => {
     return this.streams.find(stream => {
-      return (stream.tap_stream_id = tap_stream_id);
+      return stream.tap_stream_id === tapStreamId;
     });
   };
 
-  shuffleStreams = (state: BookmarksStateType = {}) => {
+  shuffleStreams = (state: BookmarksStateType = {}): CatalogEntry[] => {
     return getCurrentlySyncing(state) ? this.streams.reverse() : this.streams;
   };
 
@@ -53,7 +53,9 @@ export class Catalog implements CatalogType {
     });
   };
 
-  toJSON = () => ({ streams: this.streams.map(stream => stream.toJSON()) });
+  toJSON = (): CatalogType => ({
+    streams: this.streams.map(stream => stream.toJSON()),
+  });
 
-  toString = () => JSON.stringify(this.toJSON());
+  toString = (): string => JSON.stringify(this.toJSON());
 }
